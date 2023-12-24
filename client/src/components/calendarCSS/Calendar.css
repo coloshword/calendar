@@ -1,12 +1,9 @@
+/* container for entire application*/
 .calendar {
     height: 100%;
 }
 
-.calendar-body {
-    height: calc(100% - 4rem);
-    overflow: hidden;
-}
-
+/* header sytlings*/
 .calendar-header {
     height: 4rem;
     border-bottom: 1px solid #dadce0;
@@ -38,3 +35,8 @@
     margin-left: -0.5rem;
 }
 
+.calendar-body { 
+    height: calc(100% - 4rem);
+    display: flex;
+    flex-direction: row;
+}

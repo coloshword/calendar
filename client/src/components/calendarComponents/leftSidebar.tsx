@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
+import '../calendarCSS/LeftSidebar.css';
 
-const leftSidebar: FC = ({}) => {
+const LeftSidebar: FC = ({}) => {
     return (
-        <div></div>
+        <div className="left-sidebar"></div>
     )
 }
+
+export{ LeftSidebar }
