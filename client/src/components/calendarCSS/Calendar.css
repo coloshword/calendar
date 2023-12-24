@@ -1,0 +1,8 @@
+.calendar {
+    height: 100%;
+}
+
+.calendar-body {
+    height: calc(100% - 4rem);
+    overflow: hidden;
+}

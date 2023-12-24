@@ -1,10 +1,13 @@
-import {useState, useEffect} from "react";
-import axios from "axios";
+import React, { FC } from "react";
 import { Header }  from "./calendarComponents/Header"
+import './calendarCSS/Calendar.css';
 
-const Calendar = ({}) => {
+const Calendar: FC = ({}) => {
     return(
-        <Header/>
+        <div className="calendar">
+            <Header/>
+            <div className="calendar-body"></div>
+        </div>
     )
 };
 

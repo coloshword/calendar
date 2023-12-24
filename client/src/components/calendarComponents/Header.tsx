@@ -1,9 +1,10 @@
 import {useState, useEffect} from "react";
 import '../calendarCSS/Header.css';
+import React, { FC } from 'react';
 import headerIcon from '../../assets/icon.png';
 import sideBar from '../../assets/sidebar.svg'
 
-const Header = ({}) => {
+const Header: FC = ({}) => {
     return(
         <div className="calendar-header">
             <img className="sidebar-icon" src={sideBar}/>
