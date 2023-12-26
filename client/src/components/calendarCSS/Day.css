@@ -9,6 +9,10 @@
     margin-left: 2rem;
 }
 
+.day-container {
+    height: 100%;
+}
+
 .day-date-circle {
     border-radius: 50%;
     width: 3rem;
@@ -22,4 +26,14 @@
 .day-date-today {
     background-color: #643B9F;
     color: white;
+}
+
+.day-grid-container {
+    height: 80%;
+    overflow: scroll;
+}
+.day-grid {
+    /* 24 hours = 24 "sections", each section = 5% of screen = 5svh * 24 */
+    height: 150%;
+    background-color:  pink;
 }

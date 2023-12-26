@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100svh;
+  overflow-y: hidden; /* disable scrolling for outside the calendar date component */
 }
 
 #root {
