@@ -1,0 +1,25 @@
+.day-date-container {
+    display: flex;
+    flex-direction: column;
+    color: #643B9F;
+    font-weight: 700;
+    font-size: 0.8rem;
+    width: 3rem;
+    text-align: center;
+    margin-left: 2rem;
+}
+
+.day-date-circle {
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    color: black;
+    text-align: center;
+    line-height: 3rem;
+    font-size: 1.5rem;
+}
+
+.day-date-today {
+    background-color: #643B9F;
+    color: white;
+}
