@@ -16,6 +16,7 @@ const Calendar: FC = ({}) => {
     const nextPrevDateBtns = () => {
         return(
             <div className="next-prev-btn-container">
+                <button onClick={() => handleToday()}>Today</button>
                 <button onClick={() => handlePrevDate()}>Prev</button>
                 <button onClick={() => handleNextDate()}>Next</button>
             </div>
@@ -37,6 +38,11 @@ const Calendar: FC = ({}) => {
         let prevDay = new Date(viewDate);
         prevDay.setDate(viewDate.getDate() - 1);
         setViewDate(prevDay);
+    }
+
+    /* handleToday: handles the today button press */
+    const handleToday = () => {
+        setViewDate(today);
     }
 
 

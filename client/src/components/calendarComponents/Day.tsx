@@ -26,13 +26,21 @@ const Day: FC<DayProps> = ({ day, today }) => {
     const renderDayGrid = () => {
         return (
             <div className="day-grid-container">
-                 <div className="day-grid"></div>
+                 <div className="day-grid">
+                    {/* Create 24 inner divs, representing "hours"*/}
+                    {Array.from({length: 24}, (_, i) => i).map(num => ( 
+                        <div key={num} className="day-hour-section">
+                            {num < 12 ? <span className="time-text"> {num == 0 ? 12 : num} AM </span> : <span className="time-text"> {(num - 12) == 0 ? 12 : num } PM </span>}
+                            <hr className="hour-line"></hr>
+                        </div>
+                    ))}
+                 </div>
             </div>
         )
     }
 
     return (
-        <div className="day-container">
+        <div className="day-container unselectable">
             {renderDate()}
             {renderDayGrid()}
         </div>

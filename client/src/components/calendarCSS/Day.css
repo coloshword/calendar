@@ -7,6 +7,8 @@
     width: 3rem;
     text-align: center;
     margin-left: 2rem;
+    padding-bottom: 1rem;
+
 }
 
 .day-container {
@@ -29,11 +31,28 @@
 }
 
 .day-grid-container {
-    height: 80%;
+    height: calc(100% - 4.5rem);
     overflow: scroll;
 }
-.day-grid {
-    /* 24 hours = 24 "sections", each section = 5% of screen = 5svh * 24 */
-    height: 150%;
-    background-color:  pink;
+
+.day-hour-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3rem;
+    font-size: 0.8rem;
+    color: #77797f;
+}
+
+.time-text {
+    font-size: 0.8rem;
+    color: #77797f;
+    margin-right: 0.8%;
+}
+
+.hour-line {
+    all: unset;
+    width: 96%;         
+    height: 1px;          
+    background-color: #AC94F4
 }
