@@ -30,7 +30,7 @@ const Day: FC<DayProps> = ({ day, today }) => {
                     {/* Create 24 inner divs, representing "hours"*/}
                     {Array.from({length: 24}, (_, i) => i).map(num => ( 
                         <div key={num} className="day-hour-section">
-                            {num < 12 ? <span className="time-text"> {num == 0 ? 12 : num} AM </span> : <span className="time-text"> {(num - 12) == 0 ? 12 : num } PM </span>}
+                            {num < 12 ? <pre className="time-text"> {num == 0 ? 12 : num} AM </pre> : <pre className="time-text"> {(num - 12) == 0 ? 12 : num - 12 } PM </pre>}
                             <hr className="hour-line"></hr>
                         </div>
                     ))}

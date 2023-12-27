@@ -3,7 +3,9 @@ import '../calendarCSS/LeftSidebar.css';
 
 const LeftSidebar: FC = ({}) => {
     return (
-        <div className="left-sidebar"></div>
+        <div className="left-sidebar">
+            <button> + Add Event</button>
+        </div>
     )
 }
 
