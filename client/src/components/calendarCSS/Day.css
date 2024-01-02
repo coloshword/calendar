@@ -31,15 +31,16 @@
 }
 
 .day-grid-container {
-    height: calc(100% - 6rem);
+    height: calc(100% - 5rem);
     overflow: scroll;
+    z-index: 1;
 }
 
 .day-hour-section {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
     font-size: 0.8rem;
     color: #77797f;
 }
@@ -54,4 +55,32 @@
     width: 96%;         
     height: 1px;          
     background-color: #AC94F4
+}
+
+.day-grid {
+    position: relative;
+    flex: 1;
+    margin-top: 1%;
+}
+
+.grid-time-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.hour-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3.221rem;
+    width: 5%;
+    border-right: solid 1px #AC94F4;
+}
+
+/* Stylling for an added event */
+.day-event {
+    width: 90%;
+    left: 0%;
+    position: absolute;
+    background-color: violet;
+    border-radius: 0.5rem;
 }

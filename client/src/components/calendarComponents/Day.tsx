@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import '../calendarCSS/Day.css';
 
 const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -8,9 +8,22 @@ interface DayProps {
     today: Date
 }
 
+interface Event {
+    title: string;
+    start: [number, number];
+    end: [number, number];
+}
+
+
 /* Day: component that renders a "day" of the calendar --> specifically in day mode */
 const Day: FC<DayProps> = ({ day, today }) => {
     /* renderDate: renders the display of day of the week and the date (of the month) */
+    const [events, setEvents] = useState<Event[]>([]);
+    const [domRect, setDomRect] = useState<DOMRect>();
+    useEffect(() => {
+        let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
+        setDomRect(div.getBoundingClientRect());
+    }, [events])
     const renderDate = () => {
         return (
             <div className="day-date-container">
@@ -22,26 +35,79 @@ const Day: FC<DayProps> = ({ day, today }) => {
         )
     }
 
-    function printMousePos(e: React.MouseEvent<HTMLDivElement>) {
-        let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
-        let rect = div.getBoundingClientRect();
-        let scrollTop = div.scrollTop;
-        let cursorY = e.clientY - rect.top + scrollTop;
-        console.log(cursorY);
+    /* Given a time, (hr, minute), returns the position relative */
+    function getPosFromTime(hr: number, minute:number,  domRect: DOMRect): number{
+        // find the distance between hours and also the initial offset
+        let firstHrRect = document.querySelectorAll('.hour-line')[0].getBoundingClientRect(); 
+        let offset = firstHrRect.top - domRect.top;
+        // distance is second element offset minsu first 
+        let distanceBtHrs = (document.querySelectorAll('.hour-line')[1].getBoundingClientRect().top - domRect.top) - offset;
+        let ans = (hr * distanceBtHrs) + (minute / 60) * distanceBtHrs + offset;
+        return ans;
     }
+
+    function getEventHeight(start: [number, number], end: [number, number], domRect: DOMRect) {
+        return getPosFromTime(end[0], end[1], domRect) - getPosFromTime(start[0], start[1], domRect);
+    }
+
+    /* addEvent: adds an event to the Day Calendar by adding it to the Calendar state:
+    an event is a object with a title, start, end;
+    */
+    function addEvent(title: string, start: [number, number] , end: [number, number]): void {
+        let newEvent = {
+            title: title,
+            start: start,
+            end: end,
+        };
+        setEvents([newEvent])
+    }
+
+    function printMousePos(e: React.MouseEvent<HTMLDivElement>): void {
+        // let scrollTop = div.scrollTop;
+        // let cursorY = e.clientY - rect.top + scrollTop;
+        // getPosFromTime(13, 30, rect);
+        // console.log(cursorY);
+        let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
+        let rect:DOMRect = div.getBoundingClientRect();
+        addEvent('deez nuts', [0, 30], [2, 45]);
+        console.log(events);
+    }
+
+    const renderEvents = () => {
+        return events.map((event, index) => {
+            const top = getPosFromTime(event.start[0], event.start[1], domRect!);
+            const height = getEventHeight(event.start, event.end, domRect!);
+            return (
+                <div 
+                    key={index} 
+                    className="day-event" 
+                    style={{ top: `${top}px`, height: `${height}px` }}>
+                    {event.title}
+                </div>
+            );
+        });
+    }
+
 
     /* renderDayGrid: renders the visual "grid" that represents a day */
     const renderDayGrid = () => {
         return (
             <div className="day-grid-container" onClick={(e) => printMousePos(e)}>
                 {/* Create 24 inner divs, representing "hours"*/}
-                <div className="day-grid">
-                    {Array.from({ length: 24 }, (_, i) => i).map(num => (
-                        <div key={num} className="day-hour-section">
-                            {num < 12 ? <pre className="time-text"> {num == 0 ? 12 : num} AM </pre> : <pre className="time-text"> {(num - 12) == 0 ? 12 : num - 12} PM </pre>}
-                            <hr className="hour-line"></hr>
-                        </div>
-                    ))}
+                <div className="grid-time-container">
+                    <div className="hour-grid">
+                        {Array.from({ length: 24 }, (_, i) => i).map(num => (
+                            <span className="time-text">{num}</span>
+                        ))}
+                    </div>
+                    <div className="day-grid">
+                        {Array.from({ length: 24 }, (_, i) => i).map(num => (
+                            <div key={num} className="day-hour-section" >
+                                <hr className="hour-line"></hr>
+                            </div>
+                        ))}
+                        {renderEvents()}
+                    </div>
                 </div>
             </div>
         )
