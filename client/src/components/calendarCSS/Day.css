@@ -31,7 +31,7 @@
 }
 
 .day-grid-container {
-    height: calc(100% - 4.5rem);
+    height: calc(100% - 6rem);
     overflow: scroll;
 }
 

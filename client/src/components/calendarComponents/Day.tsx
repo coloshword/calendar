@@ -22,19 +22,27 @@ const Day: FC<DayProps> = ({ day, today }) => {
         )
     }
 
+    function printMousePos(e: React.MouseEvent<HTMLDivElement>) {
+        let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
+        let rect = div.getBoundingClientRect();
+        let scrollTop = div.scrollTop;
+        let cursorY = e.clientY - rect.top + scrollTop;
+        console.log(cursorY);
+    }
+
     /* renderDayGrid: renders the visual "grid" that represents a day */
     const renderDayGrid = () => {
         return (
-            <div className="day-grid-container">
-                 <div className="day-grid">
-                    {/* Create 24 inner divs, representing "hours"*/}
-                    {Array.from({length: 24}, (_, i) => i).map(num => ( 
+            <div className="day-grid-container" onClick={(e) => printMousePos(e)}>
+                {/* Create 24 inner divs, representing "hours"*/}
+                <div className="day-grid">
+                    {Array.from({ length: 24 }, (_, i) => i).map(num => (
                         <div key={num} className="day-hour-section">
-                            {num < 12 ? <pre className="time-text"> {num == 0 ? 12 : num} AM </pre> : <pre className="time-text"> {(num - 12) == 0 ? 12 : num - 12 } PM </pre>}
+                            {num < 12 ? <pre className="time-text"> {num == 0 ? 12 : num} AM </pre> : <pre className="time-text"> {(num - 12) == 0 ? 12 : num - 12} PM </pre>}
                             <hr className="hour-line"></hr>
                         </div>
                     ))}
-                 </div>
+                </div>
             </div>
         )
     }
