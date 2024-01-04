@@ -1,8 +1,134 @@
+/*styling for add-event-modal*/
 .add-event-modal {
-    width: 50%;
-    height: 50%;
-    color: pink;
-    z-index: 4;
     position: absolute;
+    right: 0;
+    left: 15rem;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 1;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    background-color: white;
+    height: 30rem;
+    width: 25rem;
+}
+
+.add-event-header {
+    width: 100%;
+    height: 7%;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: #CBC3E3;
+}
+
+.add-title-input {
+    all: unset;
+    margin-top: 1rem;
+    font-size: 1.7rem;
+    border-bottom: solid 1px #049be5;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-event-close-btn {
+    all: unset;
+    cursor: pointer;
+    background-size: cover;
+    height: 2rem;
+    width: 2rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 92%;
+}
+
+.add-event-body{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.add-event-left {
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+}
+
+.add-event-right {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: 1rem;
+}
+
+.event-type-container {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.event-type-btn {
+    all: unset;
+    cursor: pointer;
+    color: #757575;
+    padding: 0.5rem;
+}
+
+.add-event-time-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.event-time-input {
+    all: unset;
+    border-bottom: solid 1px #049be5;
+}
+
+.date-input {
+    width: 40%;
+}
+
+.start-input {
+    width: 20%;
+}
+
+.end-input {
+    width: 20%;
+}
+
+.add-event-description-container {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-event-description {
+    width: 100%;
+    height: 8rem;
+}
+
+.submit-event-container {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.submit-event-btn {
+    all: unset;
+    cursor: pointer;
+    background-color: #1c73e8;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    color: white;
+    border-radius: 0.2rem;
 }

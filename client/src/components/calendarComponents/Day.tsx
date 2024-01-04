@@ -126,7 +126,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     return (
         <div className="day-container unselectable">
             {showModal && (
-                <AddEvent/>
+                <AddEvent setShowModal={setShowModal}/>
             )}
             {renderDate()}
             {renderDayGrid()}
