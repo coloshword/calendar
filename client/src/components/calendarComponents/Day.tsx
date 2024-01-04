@@ -6,7 +6,9 @@ const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 // Define the props type
 interface DayProps {
     day: Date;
-    today: Date
+    today: Date;
+    showModal: boolean;
+    setShowModal: Function;
 }
 
 interface Event {
@@ -17,11 +19,10 @@ interface Event {
 
 
 /* Day: component that renders a "day" of the calendar --> specifically in day mode */
-const Day: FC<DayProps> = ({ day, today }) => {
+const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     /* renderDate: renders the display of day of the week and the date (of the month) */
     const [events, setEvents] = useState<Event[]>([]);
     const [domRect, setDomRect] = useState<DOMRect>();
-    const [showAddEvent, setShowAddEvent] = useState(true); /* renders the addEvent of */ 
     useEffect(() => {
         let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
         setDomRect(div.getBoundingClientRect());
@@ -73,6 +74,7 @@ const Day: FC<DayProps> = ({ day, today }) => {
         // let rect:DOMRect = div.getBoundingClientRect();
         // addEvent('deez nuts', [2, 45], [6, 45]);
         // console.log(events);
+        console.log(showModal);
     }
 
     const renderEvents = () => {
@@ -123,7 +125,7 @@ const Day: FC<DayProps> = ({ day, today }) => {
 
     return (
         <div className="day-container unselectable">
-            {showAddEvent && (
+            {showModal && (
                 <AddEvent/>
             )}
             {renderDate()}
