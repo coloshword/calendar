@@ -67,10 +67,10 @@ const Day: FC<DayProps> = ({ day, today }) => {
         // let cursorY = e.clientY - rect.top + scrollTop;
         // getPosFromTime(13, 30, rect);
         // console.log(cursorY);
-        let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
-        let rect:DOMRect = div.getBoundingClientRect();
-        addEvent('deez nuts', [0, 30], [2, 45]);
-        console.log(events);
+        // let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
+        // let rect:DOMRect = div.getBoundingClientRect();
+        // addEvent('deez nuts', [2, 45], [6, 45]);
+        // console.log(events);
     }
 
     const renderEvents = () => {
@@ -97,7 +97,7 @@ const Day: FC<DayProps> = ({ day, today }) => {
                 <div className="grid-time-container">
                 <div className="hour-grid">
                     {Array.from({ length: 24 }, (_, i) => (
-                        <div className="hour-section">
+                        <div key={i} className="hour-section">
                             <span className="time-text">
                                 {i === 0 ? '12 AM' : 
                                 i < 12 ? `${i} AM` : 
@@ -110,8 +110,9 @@ const Day: FC<DayProps> = ({ day, today }) => {
                 </div>
                     <div className="day-grid">
                         {Array.from({ length: 25 }, (_, i) => i).map(num => (
-                            <hr className="hour-line"></hr>
+                            <hr key={num} className="hour-line"></hr>
                         ))}
+                        {renderEvents()}
                     </div>
                 </div>
             </div>
