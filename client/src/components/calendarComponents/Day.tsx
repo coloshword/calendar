@@ -95,18 +95,23 @@ const Day: FC<DayProps> = ({ day, today }) => {
             <div className="day-grid-container" onClick={(e) => printMousePos(e)}>
                 {/* Create 24 inner divs, representing "hours"*/}
                 <div className="grid-time-container">
-                    <div className="hour-grid">
-                        {Array.from({ length: 24 }, (_, i) => i).map(num => (
-                            <span className="time-text">{num}</span>
-                        ))}
-                    </div>
+                <div className="hour-grid">
+                    {Array.from({ length: 24 }, (_, i) => (
+                        <div className="hour-section">
+                            <span className="time-text">
+                                {i === 0 ? '12 AM' : 
+                                i < 12 ? `${i} AM` : 
+                                i === 12 ? '12 PM' : 
+                                `${i - 12} PM`}
+                            </span>
+                            <hr className="hour-line small-hour-line"></hr>
+                        </div>
+                    ))}
+                </div>
                     <div className="day-grid">
-                        {Array.from({ length: 24 }, (_, i) => i).map(num => (
-                            <div key={num} className="day-hour-section" >
-                                <hr className="hour-line"></hr>
-                            </div>
+                        {Array.from({ length: 25 }, (_, i) => i).map(num => (
+                            <hr className="hour-line"></hr>
                         ))}
-                        {renderEvents()}
                     </div>
                 </div>
             </div>
