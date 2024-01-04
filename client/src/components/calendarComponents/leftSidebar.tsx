@@ -4,7 +4,8 @@ import '../calendarCSS/LeftSidebar.css';
 const LeftSidebar: FC = ({}) => {
     return (
         <div className="left-sidebar">
-            <button> + Add Event</button>
+            {/* Add event sets modal state to (true) (show), which shows the modal*/}
+            <button> + Add Event </button>
         </div>
     )
 }

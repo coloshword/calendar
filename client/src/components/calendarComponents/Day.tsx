@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import { AddEvent } from './AddEvent';
 import '../calendarCSS/Day.css';
 
 const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -20,6 +21,7 @@ const Day: FC<DayProps> = ({ day, today }) => {
     /* renderDate: renders the display of day of the week and the date (of the month) */
     const [events, setEvents] = useState<Event[]>([]);
     const [domRect, setDomRect] = useState<DOMRect>();
+    const [showAddEvent, setShowAddEvent] = useState(true); /* renders the addEvent of */ 
     useEffect(() => {
         let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
         setDomRect(div.getBoundingClientRect());
@@ -121,6 +123,9 @@ const Day: FC<DayProps> = ({ day, today }) => {
 
     return (
         <div className="day-container unselectable">
+            {showAddEvent && (
+                <AddEvent/>
+            )}
             {renderDate()}
             {renderDayGrid()}
         </div>
