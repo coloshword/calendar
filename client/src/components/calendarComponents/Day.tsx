@@ -13,8 +13,10 @@ interface DayProps {
 
 interface Event {
     title: string;
+    date: Date;
     start: [number, number];
     end: [number, number];
+    descript: string;
 }
 
 
@@ -53,18 +55,6 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         return getPosFromTime(end[0], end[1], domRect) - getPosFromTime(start[0], start[1], domRect);
     }
 
-    /* addEvent: adds an event to the Day Calendar by adding it to the Calendar state:
-    an event is a object with a title, start, end;
-    */
-    function addEvent(title: string, start: [number, number] , end: [number, number]): void {
-        let newEvent = {
-            title: title,
-            start: start,
-            end: end,
-        };
-        setEvents([newEvent])
-    }
-
     function printMousePos(e: React.MouseEvent<HTMLDivElement>): void {
         // let scrollTop = div.scrollTop;
         // let cursorY = e.clientY - rect.top + scrollTop;
@@ -72,7 +62,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         // console.log(cursorY);
         // let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
         // let rect:DOMRect = div.getBoundingClientRect();
-        // addEvent('deez nuts', [2, 45], [6, 45]);
+        //addEvent('deez nuts', [2, 45], [6, 45]);
         // console.log(events);
         console.log(showModal);
     }
@@ -126,7 +116,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     return (
         <div className="day-container unselectable">
             {showModal && (
-                <AddEvent setShowModal={setShowModal}/>
+                <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents}/>
             )}
             {renderDate()}
             {renderDayGrid()}
