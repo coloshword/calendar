@@ -1,6 +1,7 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 import { AddEvent } from './AddEvent';
 import '../calendarCSS/Day.css';
+import { render } from '@testing-library/react';
 
 const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 // Define the props type
@@ -19,16 +20,26 @@ interface Event {
     descript: string;
 }
 
+interface DragEventDetails {
+    top: number;
+    height: number;
+}
+
 
 /* Day: component that renders a "day" of the calendar --> specifically in day mode */
 const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     /* renderDate: renders the display of day of the week and the date (of the month) */
     const [events, setEvents] = useState<Event[]>([]);
     const [domRect, setDomRect] = useState<DOMRect>();
+    const [dragEvent, setDragEvent] = useState<DragEventDetails | null>(null);
+    const dayGridRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
-        let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
-        setDomRect(div.getBoundingClientRect());
-    }, [events])
+        if(dayGridRef.current) {
+            setDomRect(dayGridRef.current.getBoundingClientRect());
+        }
+    }, [events, dayGridRef]);
+
     const renderDate = () => {
         return (
             <div className="day-date-container">
@@ -51,34 +62,65 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         return ans;
     }
 
+    /* getEventHeight: gets the height of an event, given the start and end time */
     function getEventHeight(start: [number, number], end: [number, number], domRect: DOMRect) {
         return getPosFromTime(end[0], end[1], domRect) - getPosFromTime(start[0], start[1], domRect);
     }
 
-    function printMousePos(e: React.MouseEvent<HTMLDivElement>): void {
-        // let scrollTop = div.scrollTop;
-        // let cursorY = e.clientY - rect.top + scrollTop;
-        // getPosFromTime(13, 30, rect);
-        // console.log(cursorY);
+    /* getDayGridPos: gets the y position of an event, relative to dayGrid. Meaning the top of daygrid is 0. */
+    function getDayGridPos(clientPos: number, rect: DOMRect, window: HTMLElement): number {
+        let scrollTop = window.scrollTop;
+        let cursorY = clientPos - rect.top + scrollTop;
         // let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
         // let rect:DOMRect = div.getBoundingClientRect();
-        //addEvent('deez nuts', [2, 45], [6, 45]);
-        // console.log(events);
-        console.log(showModal);
+        return cursorY + scrollTop;
     }
+
+    function startDrag(e: React.MouseEvent<HTMLDivElement>) {
+        const initialPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
+        setDragEvent({ top: initialPos, height: 0 });
+    }
+
+    function dragging(e: React.MouseEvent<HTMLDivElement>) {
+        if (dragEvent) {
+            const currentPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
+            setDragEvent({ ...dragEvent, height: currentPos - dragEvent.top });
+        }
+    }
+
+    function endDrag(e: React.MouseEvent<HTMLDivElement>) {
+        setDragEvent(null); 
+    }
+
+    function test(e: React.DragEvent<HTMLDivElement>) {
+        if (dayGridRef.current) {
+            console.log(getDayGridPos(e.clientY, dayGridRef.current.getBoundingClientRect(), dayGridRef.current));
+        }
+    }
+
+    const renderDragEvent = dragEvent && (
+        <div 
+            className="day-event" 
+            style={{ top: `${dragEvent.top}px`, height: `${dragEvent.height}px` }}>
+            {"Untitled"}
+        </div>
+    );
+    
 
     const renderEvents = () => {
         return events.map((event, index) => {
-            const top = getPosFromTime(event.start[0], event.start[1], domRect!);
-            const height = getEventHeight(event.start, event.end, domRect!);
-            return (
-                <div 
-                    key={index} 
-                    className="day-event" 
-                    style={{ top: `${top}px`, height: `${height}px` }}>
-                    {event.title}
-                </div>
-            );
+            if(event.date.toDateString() == day.toDateString()) {
+                const top = getPosFromTime(event.start[0], event.start[1], domRect!);
+                const height = getEventHeight(event.start, event.end, domRect!);
+                return (
+                    <div 
+                        key={index} 
+                        className="day-event" 
+                        style={{ top: `${top}px`, height: `${height}px` }}>
+                        {event.title}
+                    </div>
+                );
+            }
         });
     }
 
@@ -86,7 +128,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     /* renderDayGrid: renders the visual "grid" that represents a day */
     const renderDayGrid = () => {
         return (
-            <div className="day-grid-container" onClick={(e) => printMousePos(e)}>
+            <div className="day-grid-container">
                 {/* Create 24 inner divs, representing "hours"*/}
                 <div className="grid-time-container">
                 <div className="hour-grid">
@@ -102,11 +144,12 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
                         </div>
                     ))}
                 </div>
-                    <div className="day-grid">
+                <div className="day-grid" ref={dayGridRef} onMouseDown={startDrag} onMouseMove={dragging} onMouseUp={endDrag}>
                         {Array.from({ length: 25 }, (_, i) => i).map(num => (
                             <hr key={num} className="hour-line"></hr>
                         ))}
                         {renderEvents()}
+                        {renderDragEvent}
                     </div>
                 </div>
             </div>
