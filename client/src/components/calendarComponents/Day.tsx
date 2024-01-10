@@ -88,6 +88,23 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     
         return [hr, minute];
     }
+
+    /* formatTime: formats time from military time to standard time */
+    function formatTime(time: number[]): string {
+        let period = 'am';
+        if(time[0] >= 12) {
+            period = 'pm';
+        }
+        let hours = time[0] % 12;
+        if(hours === 0) {
+            hours = 12;
+        }
+        let minutes:string = time[1].toString();
+        if(Number(minutes) < 10) {
+            minutes = '0' + minutes;
+        }
+        return `${hours}:${minutes}${period}`;
+    }
     
 
     /* getEventHeight: gets the height of an event, given the start and end time */
@@ -103,10 +120,18 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     }
 
     function startDrag(e: React.MouseEvent<HTMLDivElement>) {
+        // Get the initial position from the mouse event
         const initialPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
-        setDragEvent({ top: initialPos, height: 0 });
+        
+        // Snap the start position to the nearest 15-minute interval
+        const [snappedHr, snappedMin] = getTimeFromPos(initialPos, domRect!);
+        const snappedInitialPos = getPosFromTime(snappedHr, snappedMin, domRect!);
+    
+        // Set the drag event with the snapped position
+        setDragEvent({ top: snappedInitialPos, height: 0 });
         setIsDragging(true);
     }
+    
     
     function dragging(e: React.MouseEvent<HTMLDivElement>) {
         if (isDragging && dragEvent) {
@@ -134,9 +159,9 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
 
     const renderDragEvent = dragEvent && (
         <div 
-            className="day-event" 
+            className="day-event dragging-day-event" 
             style={{ top: `${dragEvent.top}px`, height: `${dragEvent.height}px` }}>
-            {"Untitled"}
+            <span className="event-title">{"Untitled"}</span>
         </div>
     );
     
@@ -151,7 +176,8 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
                         key={index} 
                         className="day-event" 
                         style={{ top: `${top}px`, height: `${height}px` }}>
-                        {event.title}
+                        <span className="event-title">{event.title}</span>
+                        <span className="event-time">{`${formatTime(event.start)} - ${formatTime(event.end)}`}</span>
                     </div>
                 );
             }
@@ -178,7 +204,13 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
                         </div>
                     ))}
                 </div>
-                <div className="day-grid" ref={dayGridRef} onMouseDown={startDrag} onMouseMove={dragging} onMouseUp={endDrag}>
+                <div 
+                    className={`day-grid ${isDragging ? 'cursor-grabbing' : 'cursor-default'}`} 
+                    ref={dayGridRef} 
+                    onMouseDown={startDrag} 
+                    onMouseMove={dragging} 
+                    onMouseUp={endDrag}>
+
                         {Array.from({ length: 25 }, (_, i) => i).map(num => (
                             <hr key={num} className="hour-line"></hr>
                         ))}

@@ -45,7 +45,7 @@
 
 .hour-line {
     all: unset;
-    width: 96%;         
+    width: 98%;         
     height: 1px;          
     background-color: #AC94F4
 }
@@ -85,9 +85,37 @@
 }
 /* Stylling for an added event */
 .day-event {
-    width: 90%;
+    width: 96%;
     left: 0%;
     position: absolute;
-    background-color: violet;
-    border-radius: 0.5rem;
+    background-color: #049be5;
+    color: white;
+    border-radius: 0.3rem;
+}
+
+.event-title {
+    display: block;
+    margin-left: 0.8rem;
+    margin-top: 0.2rem;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.event-time {
+    display: block;
+    margin-left: 0.8rem;
+    margin-top: 0.2rem;
+    font-size: 0.7rem;
+}
+
+.dragging-day-event {
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+/* cursor styling based on dragging */
+.cursor-default {
+    cursor: default;
+}
+
+.cursor-grabbing {
+    cursor: grabbing;
 }
