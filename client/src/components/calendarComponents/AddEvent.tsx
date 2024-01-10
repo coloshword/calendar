@@ -1,5 +1,5 @@
 /* add event modal */
-import React, {FC, useState} from 'react';
+import React, {Dispatch, FC, useState} from 'react';
 import '../calendarCSS/AddEvent.css';
 import closeIcon from '../../assets/x.svg';
 
@@ -15,12 +15,17 @@ interface AddEventProps {
     setShowModal: Function;
     events: Event[];
     setEvents: Function;
+    defaultModalDate: Date;
+    defaultModalStart: number[];
+    defaultModalEnd: number[];
 }
-const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents}) => {
+const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultModalDate, defaultModalStart, defaultModalEnd}) => {
     const [title, setTitle] = useState('');
-    const [date, setDate] = useState(''); // default is today but can be changed 
-    const [startTime, setStartTime] = useState(''); // of the for 'hh, mm' in 24 hour time
-    const [endTime, setEndTime] = useState(''); // same as start time
+    const formattedStartTime = formatTime(defaultModalStart);
+    const formattedEndTime = formatTime(defaultModalEnd);
+    const [date, setDate] = useState(defaultModalDate);
+    const [startTime, setStartTime] = useState(formattedStartTime);
+    const [endTime, setEndTime] = useState(formattedEndTime);
     const [descript, setDescript] = useState('');
     /* addEvent: adds an event to the Calendar by adding it to the Event prop
     an event is a object with a title, start, end;
@@ -35,11 +40,13 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents}) => {
             descript: descript
         };
         console.log(newEvent);
-        setEvents([...events, newEvent])
+        setEvents([...events, newEvent]);
+        setShowModal(false);
     }
 
     function convertToMilitaryTime(timeStr: string): [number, number] {
-        const regex = /(\d{1,2}):(\d{2})(am|pm)/i;
+        console.log(timeStr);
+        const regex = /(\d{1,2}):(\d{2})\s*(am|pm)/i;
         const match = timeStr.match(regex);
     
         if (match) {
@@ -55,24 +62,60 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents}) => {
     
             return [hours, minutes];
         } else {
+            console.log('MATCH ERROR');
             throw new Error('Invalid time format');
         }
     }
+
+    /* time helper functions */
+
+    /* formatDateToArray: formats date to an array of strings */
+    function formatDateToArray(date: Date): string[] {
+        let day = date.getDate().toString();
+        let month = (date.getMonth() + 1).toString(); // Months are zero indexed
+        let year = date.getFullYear();
     
+        // Add leading zeros to day and month if they are less than 10
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+    
+        return [month, day, year.toString()];
+    }
+    
+    /* formatTime: formats time from military time to standard time */
+    function formatTime(time: number[]): string {
+        let period = 'am';
+        if(time[0] >= 12) {
+            period = 'pm';
+        }
+        let hours = time[0] % 12;
+        if(hours === 0) {
+            hours = 12;
+        }
+        let minutes:string = time[1].toString();
+        if(Number(minutes) < 10) {
+            minutes = '0' + minutes;
+        }
+        return `${hours}:${minutes}${period}`;
+    }
+
 
     /* handleAddEvent: event listener to handle adding an event */
     function handleAddEvent() {
-        console.log(title); // formatted properly
-        console.log(date);
-        console.log(startTime);
-        console.log(endTime);
-        console.log(descript);
         // format data properly to be an event
-        let dateAsArray = date.split('/');
+        let dateAsArray = formatDateToArray(date);
         let eventDate = new Date(Number(dateAsArray[2]), Number(dateAsArray[0]) - 1, Number(dateAsArray[1]));
         let eventStart = convertToMilitaryTime(startTime);
         let eventEnd = convertToMilitaryTime(endTime);
-        addEvent(title, eventDate, eventStart, eventEnd, descript);
+        let eventTitle = title;
+        if(title === '') {
+            eventTitle = 'Untitled Event';
+        }
+        addEvent(eventTitle, eventDate, eventStart, eventEnd, descript);
     }
     return(
         <div className="add-event-modal">
@@ -84,16 +127,16 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents}) => {
             <div className="add-event-body">
                 <div className="add-event-left"></div>
                 <div className="add-event-right">
-                    <input type="text" placeholder='Add title' className="add-title-input" onChange={e => setTitle(e.target.value)}></input>
+                    <input type="text" autoFocus placeholder='Add title' className="add-title-input" onChange={e => setTitle(e.target.value)}></input>
                     <div className="event-type-container">
                         <button className="event-type-btn">Event</button>
                         <button className="event-type-btn">Task</button>
                     </div>
                     <div className="add-event-time-container">
-                        <input type="text" placeholder="mm/dd/yyyy" className="event-time-input date-input" onChange={e => setDate(e.target.value)}></input>
-                        <input type="text" placeholder="hh:mm" className="event-time-input start-input" onChange={e => setStartTime(e.target.value)}></input>
-                        <span>-</span>
-                        <input type="text" placeholder="hh:mm" className="event-time-input end-input" onChange={e => setEndTime(e.target.value)}></input>
+                    <input type="text" readOnly value={date.toDateString()} className="event-time-input date-input"></input>
+                    <input type="text" value={startTime} className="event-time-input start-input" onChange={e => setStartTime(e.target.value)}></input>
+                    <span>-</span>
+                    <input type="text" value={endTime} className="event-time-input end-input" onChange={e => setEndTime(e.target.value)}></input>
                     </div>
                     <div className="add-event-description-container">
                         <textarea placeholder="Add description" className="add-event-description" onChange={e => setDescript(e.target.value)}></textarea>

@@ -31,14 +31,23 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     /* renderDate: renders the display of day of the week and the date (of the month) */
     const [events, setEvents] = useState<Event[]>([]);
     const [domRect, setDomRect] = useState<DOMRect>();
-    const [dragEvent, setDragEvent] = useState<DragEventDetails | null>(null);
+    const [isDragging, setIsDragging] = useState(false); // used to check if user is dragging to create event 
+    const [dragEvent, setDragEvent] = useState<DragEventDetails | null>(null); //used to render the drag event
     const dayGridRef = useRef<HTMLDivElement>(null);
+    /* States to control modal */
+    const [defaultModalDate, setDefaultModalDate] = useState(day); //default date is today
+    const [defaultModalStart, setDefaultModalStart]= useState([0, 0]);
+    const [defaultModalEnd, setDefaultModalEnd] = useState([1, 0]); //default times are 12:00am to 1:00am
 
     useEffect(() => {
         if(dayGridRef.current) {
             setDomRect(dayGridRef.current.getBoundingClientRect());
         }
-    }, [events, dayGridRef]);
+        if (!showModal) {
+            // If showModal is false, reset dragEvent to null.
+            setDragEvent(null);
+        }
+    }, [events, dayGridRef, showModal]);
 
     const renderDate = () => {
         return (
@@ -62,6 +71,16 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         return ans;
     }
 
+    /* getTimeFromPos: given a position, returns the time (hr, minute) */
+    function getTimeFromPos(pos: number, domRect: DOMRect): [number, number] {
+        let firstHrRect = document.querySelectorAll('.hour-line')[0].getBoundingClientRect(); 
+        let offset = firstHrRect.top - domRect.top;
+        let distanceBtHrs = (document.querySelectorAll('.hour-line')[1].getBoundingClientRect().top - domRect.top) - offset;
+        let hr = Math.floor((pos - offset) / distanceBtHrs);
+        let minute = Math.floor(((pos - offset) % distanceBtHrs) / distanceBtHrs * 60);
+        return [hr, minute];
+    }
+
     /* getEventHeight: gets the height of an event, given the start and end time */
     function getEventHeight(start: [number, number], end: [number, number], domRect: DOMRect) {
         return getPosFromTime(end[0], end[1], domRect) - getPosFromTime(start[0], start[1], domRect);
@@ -71,31 +90,32 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     function getDayGridPos(clientPos: number, rect: DOMRect, window: HTMLElement): number {
         let scrollTop = window.scrollTop;
         let cursorY = clientPos - rect.top + scrollTop;
-        // let div: HTMLElement = document.querySelector('.day-grid') as HTMLElement;
-        // let rect:DOMRect = div.getBoundingClientRect();
         return cursorY + scrollTop;
     }
 
     function startDrag(e: React.MouseEvent<HTMLDivElement>) {
         const initialPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
         setDragEvent({ top: initialPos, height: 0 });
+        setIsDragging(true);
     }
 
     function dragging(e: React.MouseEvent<HTMLDivElement>) {
-        if (dragEvent) {
+        if (isDragging && dragEvent) {
             const currentPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
             setDragEvent({ ...dragEvent, height: currentPos - dragEvent.top });
         }
     }
 
     function endDrag(e: React.MouseEvent<HTMLDivElement>) {
-        setDragEvent(null); 
-    }
-
-    function test(e: React.DragEvent<HTMLDivElement>) {
-        if (dayGridRef.current) {
-            console.log(getDayGridPos(e.clientY, dayGridRef.current.getBoundingClientRect(), dayGridRef.current));
-        }
+        // change defaultModalStart and defaultModalEnd to be the time of the drag event
+        const start = getTimeFromPos(dragEvent!.top, domRect!);
+        const end = getTimeFromPos(dragEvent!.top + dragEvent!.height, domRect!);
+        setIsDragging(false);
+        setDefaultModalStart(start);
+        setDefaultModalEnd(end);
+        setDefaultModalDate(day);
+        setShowModal(true);
+       // setDragEvent(null);  wait to do this until after the modal is closed so event rect still shows -- in useEffect
     }
 
     const renderDragEvent = dragEvent && (
@@ -159,7 +179,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     return (
         <div className="day-container unselectable">
             {showModal && (
-                <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents}/>
+                <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents} defaultModalDate={defaultModalDate} defaultModalStart={defaultModalStart} defaultModalEnd={defaultModalEnd}/>
             )}
             {renderDate()}
             {renderDayGrid()}
