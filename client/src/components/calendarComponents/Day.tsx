@@ -78,8 +78,17 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         let distanceBtHrs = (document.querySelectorAll('.hour-line')[1].getBoundingClientRect().top - domRect.top) - offset;
         let hr = Math.floor((pos - offset) / distanceBtHrs);
         let minute = Math.floor(((pos - offset) % distanceBtHrs) / distanceBtHrs * 60);
+    
+        // Round the minute to the nearest 15-minute mark
+        minute = Math.round(minute / 15) * 15;
+        if (minute >= 60) {
+            hr++;
+            minute = 0;
+        }
+    
         return [hr, minute];
     }
+    
 
     /* getEventHeight: gets the height of an event, given the start and end time */
     function getEventHeight(start: [number, number], end: [number, number], domRect: DOMRect) {
@@ -98,25 +107,30 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         setDragEvent({ top: initialPos, height: 0 });
         setIsDragging(true);
     }
-
+    
     function dragging(e: React.MouseEvent<HTMLDivElement>) {
         if (isDragging && dragEvent) {
             const currentPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
-            setDragEvent({ ...dragEvent, height: currentPos - dragEvent.top });
+            const [hr, minute] = getTimeFromPos(currentPos, domRect!);
+            let snappedPos = getPosFromTime(hr, minute, domRect!); // pass domRect as the third argument
+            setDragEvent({ ...dragEvent, height: snappedPos - dragEvent.top });
         }
     }
+    
+    
 
     function endDrag(e: React.MouseEvent<HTMLDivElement>) {
-        // change defaultModalStart and defaultModalEnd to be the time of the drag event
+        // Snap start and end times to the nearest 15 minutes
         const start = getTimeFromPos(dragEvent!.top, domRect!);
         const end = getTimeFromPos(dragEvent!.top + dragEvent!.height, domRect!);
+    
         setIsDragging(false);
         setDefaultModalStart(start);
         setDefaultModalEnd(end);
         setDefaultModalDate(day);
         setShowModal(true);
-       // setDragEvent(null);  wait to do this until after the modal is closed so event rect still shows -- in useEffect
     }
+    
 
     const renderDragEvent = dragEvent && (
         <div 
