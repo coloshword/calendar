@@ -91,6 +91,7 @@
     background-color: #049be5;
     color: white;
     border-radius: 0.3rem;
+    z-index: 2;
 }
 
 .event-title {

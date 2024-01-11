@@ -162,6 +162,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             className="day-event dragging-day-event" 
             style={{ top: `${dragEvent.top}px`, height: `${dragEvent.height}px` }}>
             <span className="event-title">{"Untitled"}</span>
+            <span className="event-time">{`${formatTime(getTimeFromPos(dragEvent.top, domRect!))} - ${formatTime(getTimeFromPos(dragEvent.top + dragEvent.height, domRect!))}`}</span>
         </div>
     );
     
@@ -171,10 +172,16 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             if(event.date.toDateString() == day.toDateString()) {
                 const top = getPosFromTime(event.start[0], event.start[1], domRect!);
                 const height = getEventHeight(event.start, event.end, domRect!);
+                const handleEventClick = (e: React.MouseEvent<HTMLDivElement>) => {
+                    e.stopPropagation(); 
+                };
+    
                 return (
                     <div 
                         key={index} 
                         className="day-event" 
+                        onMouseDown={handleEventClick}
+                        onMouseUp = {handleEventClick}
                         style={{ top: `${top}px`, height: `${height}px` }}>
                         <span className="event-title">{event.title}</span>
                         <span className="event-time">{`${formatTime(event.start)} - ${formatTime(event.end)}`}</span>
