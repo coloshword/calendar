@@ -2,13 +2,14 @@
 import React, {Dispatch, FC, useState} from 'react';
 import '../calendarCSS/AddEvent.css';
 import closeIcon from '../../assets/x.svg';
-
+import dropDown from '../../assets/drop-down.svg';
 interface Event {
     title: string;
     date: Date;
     start: [number, number];
     end: [number, number];
     descript: string;
+    eventColor: string;
 }
 
 interface AddEventProps {
@@ -27,6 +28,7 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
     const [startTime, setStartTime] = useState(formattedStartTime);
     const [endTime, setEndTime] = useState(formattedEndTime);
     const [descript, setDescript] = useState('');
+    const [color, setColor] = useState('#049be5');
     /* addEvent: adds an event to the Calendar by adding it to the Event prop
     an event is a object with a title, start, end;
     Adding an event to the events prop will cause the Day component to render the new event   
@@ -37,7 +39,8 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
             date: date,
             start: start,
             end: end,
-            descript: descript
+            descript: descript,
+            eventColor: color
         };
         console.log(newEvent);
         setEvents([...events, newEvent]);
@@ -103,6 +106,15 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
         return `${hours}:${minutes}${period}`;
     }
 
+    function colorDropdown() {
+        return(
+            <div className="color-drop-down-btn">
+                <div className="drop-down-circle" style={{backgroundColor:color}}></div>
+                <img className="drop-down-icon" src={dropDown}></img>
+            </div>
+        ) 
+    }
+
 
     /* handleAddEvent: event listener to handle adding an event */
     function handleAddEvent() {
@@ -131,6 +143,7 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
                     <div className="event-type-container">
                         <button className="event-type-btn">Event</button>
                         <button className="event-type-btn">Task</button>
+                        {colorDropdown()}
                     </div>
                     <div className="add-event-time-container">
                     <input type="text" readOnly value={date.toDateString()} className="event-time-input date-input"></input>

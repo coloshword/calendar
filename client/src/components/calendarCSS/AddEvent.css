@@ -134,3 +134,31 @@
     color: white;
     border-radius: 0.2rem;
 }
+
+.color-drop-down-btn {
+    margin-left: 20%;
+    padding: 0.5rem;
+    border-radius: 0.2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+
+}
+
+.color-drop-down-btn:hover {
+    background-color: #f6f6f6;
+}
+
+.drop-down-circle {
+    width: 1rem;  
+    height: 1rem;
+    border-radius: 50%;
+}
+
+.drop-down-icon {
+    height: 0.8rem;
+    width: 0.8rem;
+    fill: #3c4043;
+}

@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { AddEvent } from './AddEvent';
 import '../calendarCSS/Day.css';
-import { render } from '@testing-library/react';
+import {EventModal} from './EventModal';
+
 
 const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 // Define the props type
@@ -18,6 +19,7 @@ interface Event {
     start: [number, number];
     end: [number, number];
     descript: string;
+    eventColor: string;
 }
 
 interface DragEventDetails {
@@ -34,6 +36,8 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     const [isDragging, setIsDragging] = useState(false); // used to check if user is dragging to create event 
     const [dragEvent, setDragEvent] = useState<DragEventDetails | null>(null); //used to render the drag event
     const dayGridRef = useRef<HTMLDivElement>(null);
+    const [showEventModal, setShowEventModal] = useState(false);
+    const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
     /* States to control modal */
     const [defaultModalDate, setDefaultModalDate] = useState(day); //default date is today
     const [defaultModalStart, setDefaultModalStart]= useState([0, 0]);
@@ -120,6 +124,12 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     }
 
     function startDrag(e: React.MouseEvent<HTMLDivElement>) {
+        // close modals if they are open and don't trigger
+        if(showModal || showEventModal) { 
+            setShowModal(false);
+            setShowEventModal(false);
+            return;
+        }
         // Get the initial position from the mouse event
         const initialPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
         
@@ -143,17 +153,21 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     }
     
     
-
     function endDrag(e: React.MouseEvent<HTMLDivElement>) {
         // Snap start and end times to the nearest 15 minutes
-        const start = getTimeFromPos(dragEvent!.top, domRect!);
-        const end = getTimeFromPos(dragEvent!.top + dragEvent!.height, domRect!);
-    
-        setIsDragging(false);
-        setDefaultModalStart(start);
-        setDefaultModalEnd(end);
-        setDefaultModalDate(day);
-        setShowModal(true);
+        if(dragEvent) {
+            const start = getTimeFromPos(dragEvent!.top, domRect!);
+
+            const end = getTimeFromPos(dragEvent!.top + dragEvent!.height, domRect!);
+
+        
+            setIsDragging(false);
+            setDefaultModalStart(start);
+            setDefaultModalEnd(end);
+            setDefaultModalDate(day);
+            setShowModal(true);
+            setIsDragging(false);
+        }
     }
     
 
@@ -174,6 +188,8 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
                 const height = getEventHeight(event.start, event.end, domRect!);
                 const handleEventClick = (e: React.MouseEvent<HTMLDivElement>) => {
                     e.stopPropagation(); 
+                    setCurrentEvent(event);
+                    setShowEventModal(true);    
                 };
     
                 return (
@@ -181,8 +197,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
                         key={index} 
                         className="day-event" 
                         onMouseDown={handleEventClick}
-                        onMouseUp = {handleEventClick}
-                        style={{ top: `${top}px`, height: `${height}px` }}>
+                        style={{ top: `${top}px`, height: `${height}px`, backgroundColor: `${event.eventColor}`}}>
                         <span className="event-title">{event.title}</span>
                         <span className="event-time">{`${formatTime(event.start)} - ${formatTime(event.end)}`}</span>
                     </div>
@@ -233,6 +248,9 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         <div className="day-container unselectable">
             {showModal && (
                 <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents} defaultModalDate={defaultModalDate} defaultModalStart={defaultModalStart} defaultModalEnd={defaultModalEnd}/>
+            )}
+            {showEventModal && ( 
+                <EventModal currentEvent={currentEvent} setShowModal={setShowEventModal}/>
             )}
             {renderDate()}
             {renderDayGrid()}

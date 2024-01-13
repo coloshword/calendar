@@ -1,0 +1,34 @@
+.event-details-modal {
+    position: absolute;
+    left: 60%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 3;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    background-color: white;
+    min-height: 5rem;
+    padding: 1rem;
+    max-height: 80%; 
+    display: flex;
+    width: 30rem;
+}
+
+.event-details-time {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.event-details-title {
+    color: #3c4043;
+    font-size: 1.4rem;
+}
+
+.event-details-time {
+    color: #7e8083;
+    font-size: 0.9rem;
+}
+
