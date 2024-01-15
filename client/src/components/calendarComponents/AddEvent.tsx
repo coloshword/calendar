@@ -1,5 +1,5 @@
 /* add event modal */
-import React, {Dispatch, FC, useState, useRef, useEffect} from 'react';
+import React, {Dispatch, FC, useState} from 'react';
 import '../calendarCSS/AddEvent.css';
 import closeIcon from '../../assets/x.svg';
 import dropDown from '../../assets/drop-down.svg';

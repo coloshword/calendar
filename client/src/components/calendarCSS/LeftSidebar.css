@@ -1,4 +1,8 @@
 .left-sidebar {
     height: 100%;
     width: 16rem;
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+    gap: 2rem;
 }

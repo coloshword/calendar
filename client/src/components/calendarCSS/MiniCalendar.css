@@ -1,0 +1,6 @@
+.mini-calendar-container {
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    flex-direction: column;
+}
