@@ -42,6 +42,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     const [defaultModalDate, setDefaultModalDate] = useState(day); //default date is today
     const [defaultModalStart, setDefaultModalStart]= useState([0, 0]);
     const [defaultModalEnd, setDefaultModalEnd] = useState([1, 0]); //default times are 12:00am to 1:00am
+    const [color, setColor] = useState('#049be5'); // color of the current event being added
 
     useEffect(() => {
         if(dayGridRef.current) {
@@ -174,7 +175,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     const renderDragEvent = dragEvent && (
         <div 
             className="day-event dragging-day-event" 
-            style={{ top: `${dragEvent.top}px`, height: `${dragEvent.height}px` }}>
+            style={{ top: `${dragEvent.top}px`, height: `${dragEvent.height}px` , backgroundColor: `${color}`}}>
             <span className="event-title">{"Untitled"}</span>
             <span className="event-time">{`${formatTime(getTimeFromPos(dragEvent.top, domRect!))} - ${formatTime(getTimeFromPos(dragEvent.top + dragEvent.height, domRect!))}`}</span>
         </div>
@@ -182,6 +183,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     
 
     const renderEvents = () => {
+        // everytime rendering events we reset the color to blue
         return events.map((event, index) => {
             if(event.date.toDateString() == day.toDateString()) {
                 const top = getPosFromTime(event.start[0], event.start[1], domRect!);
@@ -247,7 +249,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     return (
         <div className="day-container unselectable">
             {showModal && (
-                <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents} defaultModalDate={defaultModalDate} defaultModalStart={defaultModalStart} defaultModalEnd={defaultModalEnd}/>
+                <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents} defaultModalDate={defaultModalDate} defaultModalStart={defaultModalStart} defaultModalEnd={defaultModalEnd} color={color} setColor={setColor}/>
             )}
             {showEventModal && ( 
                 <EventModal currentEvent={currentEvent} setShowModal={setShowEventModal}/>

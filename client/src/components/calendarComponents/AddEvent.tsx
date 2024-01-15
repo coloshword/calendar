@@ -1,5 +1,5 @@
 /* add event modal */
-import React, {Dispatch, FC, useState} from 'react';
+import React, {Dispatch, FC, useState, useRef, useEffect} from 'react';
 import '../calendarCSS/AddEvent.css';
 import closeIcon from '../../assets/x.svg';
 import dropDown from '../../assets/drop-down.svg';
@@ -19,8 +19,10 @@ interface AddEventProps {
     defaultModalDate: Date;
     defaultModalStart: number[];
     defaultModalEnd: number[];
+    color: string;
+    setColor: Function;
 }
-const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultModalDate, defaultModalStart, defaultModalEnd}) => {
+const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultModalDate, defaultModalStart, defaultModalEnd, color, setColor}) => {
     const [title, setTitle] = useState('');
     const formattedStartTime = formatTime(defaultModalStart);
     const formattedEndTime = formatTime(defaultModalEnd);
@@ -28,7 +30,9 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
     const [startTime, setStartTime] = useState(formattedStartTime);
     const [endTime, setEndTime] = useState(formattedEndTime);
     const [descript, setDescript] = useState('');
-    const [color, setColor] = useState('#049be5');
+    const [showDropdown, setShowDropdown] = useState(false);
+    
+
     /* addEvent: adds an event to the Calendar by adding it to the Event prop
     an event is a object with a title, start, end;
     Adding an event to the events prop will cause the Day component to render the new event   
@@ -106,11 +110,59 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
         return `${hours}:${minutes}${period}`;
     }
 
-    function colorDropdown() {
+    
+    /* colorDropdownBtn: renders the color drop down  */
+    function colorDropdownBtn() {
         return(
-            <div className="color-drop-down-btn">
-                <div className="drop-down-circle" style={{backgroundColor:color}}></div>
-                <img className="drop-down-icon" src={dropDown}></img>
+            <div className="color-drop-down">
+                <div className="color-drop-down-btn" style={{backgroundColor: showDropdown ? '#f6f6f6' : 'white'}} onClick={ (event) => {event.stopPropagation(); setShowDropdown(!showDropdown)}}>
+                    <div className="drop-down-circle" style={{backgroundColor:color}}></div>
+                    <img className="drop-down-icon" src={dropDown}></img>
+                </div>
+                {showDropdown && 
+                <div className="drop-down-options">
+                    <div className="drop-down-2">
+                        <div className="drop-down-color" onClick={() => {setColor('#d50101'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#d50101'}} ></div>
+                        </div>
+                        <div className="drop-down-color" onClick={() => {setColor('#e67c73'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#e67c73'}}></div>
+                        </div>
+                    </div>
+                    <div className="drop-down-2">
+                        <div className="drop-down-color" onClick={() => {setColor('#f4511e'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#f4511e'}}></div>
+                        </div>
+                        <div className="drop-down-color" onClick={() => {setColor('#f6bf25'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#f6bf25'}} ></div>
+                        </div>
+                    </div>
+                    <div className="drop-down-2">
+                        <div className="drop-down-color" onClick={() => {setColor('#33b679'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#33b679'}}></div>
+                        </div>
+                        <div className="drop-down-color" onClick={() => {setColor('#0a8043'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#0a8043'}}></div>
+                        </div>
+                    </div>
+                    <div className="drop-down-2">
+                        <div className="drop-down-color" onClick={() => {setColor('#049be5'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#049be5'}}></div>
+                        </div>
+                        <div className="drop-down-color" onClick={() => {setColor('#4051b5'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#4051b5'}}></div>
+                        </div>
+                    </div>
+                    <div className="drop-down-2">
+                        <div className="drop-down-color" onClick={() => {setColor('#7886cb'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#7886cb'}}></div>
+                        </div>
+                        <div className="drop-down-color" onClick={() => {setColor('#8e24aa'); setShowDropdown(false)}}>
+                            <div className="drop-down-circle" style={{backgroundColor: '#8e24aa'}}></div>
+                        </div>
+                    </div>
+                </div>
+                }
             </div>
         ) 
     }
@@ -143,7 +195,7 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
                     <div className="event-type-container">
                         <button className="event-type-btn">Event</button>
                         <button className="event-type-btn">Task</button>
-                        {colorDropdown()}
+                        {colorDropdownBtn()}
                     </div>
                     <div className="add-event-time-container">
                     <input type="text" readOnly value={date.toDateString()} className="event-time-input date-input"></input>

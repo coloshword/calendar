@@ -136,7 +136,7 @@
 }
 
 .color-drop-down-btn {
-    margin-left: 20%;
+    position: relative;
     padding: 0.5rem;
     border-radius: 0.2rem;
     display: flex;
@@ -144,11 +144,15 @@
     justify-content: center;
     align-items: center;
     gap: 0.2rem;
-
 }
 
 .color-drop-down-btn:hover {
     background-color: #f6f6f6;
+    cursor: pointer;
+}
+
+.color-drop-down {
+    margin-left: 20%;
 }
 
 .drop-down-circle {
@@ -161,4 +165,30 @@
     height: 0.8rem;
     width: 0.8rem;
     fill: #3c4043;
+}
+
+
+.drop-down-options {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.drop-down-color {
+    display: flex;
+    background-color: white;
+    justify-content: center;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.drop-down-color:hover {
+    cursor:pointer;
+    background-color: #f6f6f6;
+}
+
+.drop-down-2 {
+    display: flex;
+    flex-direction: row;
 }
