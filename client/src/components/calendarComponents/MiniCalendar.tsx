@@ -11,7 +11,9 @@ const MiniCalendar: FC<MiniCalendarProps> = ({today}) => {
     "August","September","October","November","December"];
     return (
         <div className="mini-calendar-container">
-            <span> {monthNames[viewDate.getMonth()] + " " + viewDate.getFullYear()}  </span>
+            <div className="mini-calendar-header">
+                <span className="mini-calendar-header-month"> {monthNames[viewDate.getMonth()]}</span>
+            </div>
         </div>
     )
 }
