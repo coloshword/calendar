@@ -6,15 +6,61 @@
 }
 
 .mini-calendar-header {
-    width: 100%;
+    width: 60%;
+    margin-left:auto;
+    margin-right: auto;
     height: 2rem;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    font-family: Sans-Serif;
+}
+
+.mini-calendar-body {
+    width: 100%;
+    height: calc(100% - 2rem);
 }
 
 .mini-calendar-header-month {
     font-size: 0.9rem;
     font-weight: bold;
+    color: #3c4043;
+}
+
+.mini-calendar-btn {
+    all: unset;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.mini-calendar-btn:hover {
+    background-color: rgba(205, 202, 207, 0.577);
+    color: white;
+}
+
+.mini-calendar-btn:active {
+    background-color: rgba(143, 141, 144, 0.577);
+}
+
+.mini-calendar-img {
+    width: 0.9rem;
+}
+
+.mini-calendar-grid {
+    height: 100%;
+    width: 100%;
+}
+
+td {    
+    text-align: center; 
+}
+
+.week-cell {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #7610c0;
 }
