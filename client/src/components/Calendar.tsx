@@ -4,7 +4,8 @@ import headerIcon from '../assets/icon.png';
 import sideBar from '../assets/sidebar.svg'
 import { LeftSidebar } from "./calendarComponents/LeftSidebar"
 import { CalendarDisplay } from "./calendarComponents/CalendarDisplay";
-
+import leftBtn from "../assets/arrow-left.svg";
+import rightBtn from "../assets/arrow-right.svg";
 /*
 * Parent level component for application 
 */
@@ -18,9 +19,13 @@ const Calendar: FC = ({}) => {
     const nextPrevDateBtns = () => {
         return(
             <div className="next-prev-btn-container">
-                <button onClick={() => handleToday()}>Today</button>
-                <button onClick={() => handlePrevDate()}>Prev</button>
-                <button onClick={() => handleNextDate()}>Next</button>
+                <button className="today-btn" onClick={() => handleToday()}>Today</button>
+                <button className="next-prev-btn" onClick={() => handlePrevDate()}>
+                    <img src={leftBtn} className="next-prev-btn-icon" draggable="false"></img>
+                </button>
+                <button className="next-prev-btn" onClick={() => handleNextDate()}>
+                    <img src={rightBtn} className="next-prev-btn-icon" draggable="false"></img>
+                </button>
             </div>
         )
     }

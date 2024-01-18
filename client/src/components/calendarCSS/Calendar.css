@@ -43,4 +43,39 @@
 
 .next-prev-btn-container {
     margin-left: 10%;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.next-prev-btn {
+    all: unset;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    user-select: none;
+}
+
+.next-prev-btn:hover {
+    background-color: rgba(205, 202, 207, 0.577);
+}
+
+.next-prev-btn:active {
+    background-color: rgba(143, 141, 144, 0.577);
+}
+.next-prev-btn-icon {
+    width: 1.3rem;
+}
+
+.today-btn {
+    all: unset;
+    width: 2rem;
+    height: 1rem;
+    
+}
+
+.today-btn-hover {
+
 }
