@@ -62,5 +62,11 @@ td {
 .week-cell {
     font-size: 0.8rem;
     font-weight: 500;
-    color: #7610c0;
+    color: #111012;
+}
+
+.otherMonth-cell {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #877f8d;
 }

@@ -54,38 +54,39 @@ const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth}) => {
     const numDays = (m: number, y: number) => new Date(y, m + 1, 0).getDate(); 
 
     function loadCalendarGrid() {
-        console.log("load called");
         /* create dictionary mapping index to [month, day, year] 
         ie --> index 0 == the first sunday displayed 
         add event listener to each with the dictionary day mapping 
         */
+       // [month, date, year, isMonth: 1 or 0]  // if it is 1, it is part of the month, else it is not 
         let indexToDate: {[key: number] : number[]} = {};
         // map the first day of the week to the right index, fill in the rest backwards
-        let first = getFirst(currentMonth);
-        indexToDate[first.getDay()] = [first.getMonth(), first.getDate(), first.getFullYear()];
+        let first = getFirst(viewMonth);
+        indexToDate[first.getDay()] = [first.getMonth(), first.getDate(), first.getFullYear(), 1];
         let lastOfLastMonth = getLast(new Date(first.getFullYear(),first.getMonth() - 1));
         // populate the last month dates 
         for(let i = 0; i < first.getDay(); i++) {
-            indexToDate[i] = [lastOfLastMonth.getMonth(), lastOfLastMonth.getDate() - (first.getDay() - i) + 1, lastOfLastMonth.getFullYear()]
+            indexToDate[i] = [lastOfLastMonth.getMonth(), lastOfLastMonth.getDate() - (first.getDay() - i) + 1, lastOfLastMonth.getFullYear(), 0]
         }
         //populate this month dates 
         let daysInCurMonth = numDays(first.getMonth(), first.getFullYear());
         let offset = first.getDay();
         for(let i = 1; i < daysInCurMonth; i++) {
-            indexToDate[offset + i] = [first.getMonth(), first.getDate() + i, first.getFullYear()];
+            indexToDate[offset + i] = [first.getMonth(), first.getDate() + i, first.getFullYear(), 1];
         }
         // populate the rest of the month dates 
         let calendarLength: number = Object.keys(indexToDate).length;
         let nextMonth = getNext(first);
         for(let i = 0; i < 42 - calendarLength; i++) {
-            indexToDate[i + calendarLength] = [nextMonth.getMonth(), nextMonth.getDate() + i, nextMonth.getFullYear()];
+            indexToDate[i + calendarLength] = [nextMonth.getMonth(), nextMonth.getDate() + i, nextMonth.getFullYear(), 0];
         }
         // create the grid 
+
         const renderCells = (row: number) => {
             const elementsInRow = [];
             for(let i = 0; i < 7; i++) {
                 elementsInRow.push(
-                    <td className="week-cell" key={i}>
+                    <td className={(indexToDate[row * 7 + i][3] == 1) ? "week-cell" : "otherMonth-cell"} key={i}>
                         {/* get the date of the correct cell*/}
                         {indexToDate[row * 7 + i][1]} 
                     </td>
@@ -108,13 +109,13 @@ const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth}) => {
             <table className="mini-calendar-grid">
                 <tbody>
                     <tr>
-                        <td className="week-cell"> S </td>
-                        <td className="week-cell"> M </td>
-                        <td className="week-cell"> T </td>
-                        <td className="week-cell"> W </td>
-                        <td className="week-cell"> T </td>
-                        <td className="week-cell"> F </td>
-                        <td className="week-cell"> S </td>
+                        <td className="otherMonth-cell "> S </td>
+                        <td className="otherMonth-cell "> M </td>
+                        <td className="otherMonth-cell "> T </td>
+                        <td className="otherMonth-cell "> W </td>
+                        <td className="otherMonth-cell "> T </td>
+                        <td className="otherMonth-cell "> F </td>
+                        <td className="otherMonth-cell "> S </td>
                     </tr>
                     {renderRows()}
                 </tbody>
@@ -124,12 +125,12 @@ const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth}) => {
     return (
         <div className="mini-calendar-container">
             <div className="mini-calendar-header">
-                <button className="mini-calendar-btn">
-                    <img className="mini-calendar-img" onClick={handlePrevMonth} src={arrowLeft}></img>
+                <button className="mini-calendar-btn" onClick={handlePrevMonth} >
+                    <img className="mini-calendar-img"src={arrowLeft}></img>
                 </button>
                 <span className="mini-calendar-header-month"> {monthNames[viewMonth.getMonth()] + " " + viewMonth.getFullYear()}</span>
-                <button className="mini-calendar-btn">
-                    <img className="mini-calendar-img" onClick={handleNextMonth} src={arrowRight}></img>
+                <button className="mini-calendar-btn" onClick={handleNextMonth}>
+                    <img className="mini-calendar-img" src={arrowRight}></img>
                 </button>
             </div>
             <div className="mini-calendar-body">
