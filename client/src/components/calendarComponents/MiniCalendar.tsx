@@ -5,8 +5,9 @@ import arrowRight from '../../assets/arrow-right.svg';
 
 interface MiniCalendarProps {
     currentMonth: Date;
+    setViewDate: Function;
 }
-const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth}) => {
+const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth, setViewDate}) => {
 
     const [viewMonth, setViewMonth] = useState(new Date(currentMonth.getFullYear(), currentMonth.getMonth()));
 
@@ -50,6 +51,11 @@ const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth}) => {
         setViewMonth(prevMonth);
     }
 
+    /** handleCalendarCellClick: handles the click of a cell */
+    function handleCalendarCellClick(clickDate: number[]) {
+        setViewDate(new Date(clickDate[2], clickDate[0], clickDate[1]));
+    }
+
     /* numDays = gets the  number of days in year from the year and month*/
     const numDays = (m: number, y: number) => new Date(y, m + 1, 0).getDate(); 
 
@@ -86,7 +92,7 @@ const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth}) => {
             const elementsInRow = [];
             for(let i = 0; i < 7; i++) {
                 elementsInRow.push(
-                    <td className={(indexToDate[row * 7 + i][3] == 1) ? "week-cell" : "otherMonth-cell"} key={i}>
+                    <td onClick={() => handleCalendarCellClick(indexToDate[row* 7 + i])}className={(indexToDate[row * 7 + i][3] == 1) ? "week-cell" : "otherMonth-cell"} key={i}>
                         {/* get the date of the correct cell*/}
                         {indexToDate[row * 7 + i][1]} 
                     </td>

@@ -3,6 +3,8 @@
     height: 14rem;
     display: flex;
     flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .mini-calendar-header {
@@ -63,6 +65,12 @@ td {
     font-size: 0.8rem;
     font-weight: 500;
     color: #111012;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.week-cell:hover {
+    background-color: rgb(237, 231, 231);
 }
 
 .otherMonth-cell {

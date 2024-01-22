@@ -43,6 +43,7 @@
 
 .next-prev-btn-container {
     margin-left: 10%;
+    align-items: center;
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -71,11 +72,16 @@
 
 .today-btn {
     all: unset;
-    width: 2rem;
-    height: 1rem;
-    
+    display: flex;
+    border: 1px solid rgb(76, 74, 74);
+    padding: 0.5rem;
+    border-radius: 0.3rem;
 }
 
-.today-btn-hover {
+.today-btn:hover {
+    background-color: rgba(224, 221, 226, 0.577);
+}
 
+.today-btn:active{
+    background-color: rgba(143, 141, 144, 0.577);
 }

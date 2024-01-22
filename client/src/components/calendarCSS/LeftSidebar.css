@@ -6,3 +6,31 @@
     margin-left: 1rem;
     gap: 2rem;
 }
+
+.add-event-btn {
+    all: unset;
+    display: flex;
+    border: solid 1px rgb(122, 121, 121);
+    justify-content: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.3rem;
+    border-radius: 0.3rem;
+    background-color:#049be5;
+    font-weight: bold;
+    color: white;
+}
+
+.add-event-btn:hover {
+    background-color: #4051b5;
+}
+.add-event-btn:active {
+    background-color: #4051b5;
+}
+
+.left-sidebar {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+}

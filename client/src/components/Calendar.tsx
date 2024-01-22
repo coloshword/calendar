@@ -68,6 +68,7 @@ const Calendar: FC = ({}) => {
                     showModal={showModal}
                     setShowModal={setShowModal}
                     viewDate={viewDate}
+                    setViewDate={setViewDate}
                 />
                 <CalendarDisplay displayMode={displayMode} today={today} viewDate = {viewDate} showModal={showModal} setShowModal={setShowModal}/>
             </div>
