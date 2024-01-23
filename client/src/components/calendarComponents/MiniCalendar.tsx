@@ -5,9 +5,10 @@ import arrowRight from '../../assets/arrow-right.svg';
 
 interface MiniCalendarProps {
     currentMonth: Date;
+    today: Date,
     setViewDate: Function;
 }
-const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth, setViewDate}) => {
+const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth, today, setViewDate}) => {
 
     const [viewMonth, setViewMonth] = useState(new Date(currentMonth.getFullYear(), currentMonth.getMonth()));
 

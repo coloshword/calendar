@@ -1,4 +1,5 @@
 .calendar-display {
     height: 100%;
-    width: calc(100% - 16rem);
+    /* width: calc(100% - 16rem); */
+    width: 100%;
 }

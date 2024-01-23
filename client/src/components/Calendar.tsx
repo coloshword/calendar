@@ -13,6 +13,7 @@ const Calendar: FC = ({}) => {
     const [displayMode, setDisplayMode] = useState('d');
     const [today, setToday] = useState(new Date());
     const [viewDate, setViewDate] = useState(today);
+    const [showLeftBar, setShowLeftBar] = useState(true);
     /* State to show addEvent modal (to be passed) */
     const [showModal, setShowModal] = useState(false);
     /* nextPrevDateBtns: Renders the next date and prev date buttons */
@@ -56,7 +57,7 @@ const Calendar: FC = ({}) => {
     return(
         <div className="calendar">
             <div className="calendar-header">
-                <img className="sidebar-icon" src={sideBar}/>
+                <img onClick={() => setShowLeftBar(!showLeftBar)} className="sidebar-icon" src={sideBar}/>
                 <div className="logo-text-container">
                     <img className="header-icon" src={headerIcon}/>
                     <span className="icon-name">Calendar</span>
@@ -64,12 +65,14 @@ const Calendar: FC = ({}) => {
                 {nextPrevDateBtns()}
             </div>
             <div className="calendar-body">
+                {showLeftBar && 
                 <LeftSidebar
                     showModal={showModal}
                     setShowModal={setShowModal}
                     viewDate={viewDate}
+                    today={today}
                     setViewDate={setViewDate}
-                />
+                />}
                 <CalendarDisplay displayMode={displayMode} today={today} viewDate = {viewDate} showModal={showModal} setShowModal={setShowModal}/>
             </div>
         </div>

@@ -85,3 +85,7 @@
 .today-btn:active{
     background-color: rgba(143, 141, 144, 0.577);
 }
+
+.calendar-header {
+    user-select: none;
+}

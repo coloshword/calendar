@@ -5,6 +5,7 @@
     flex-direction: column;
     margin-left: auto;
     margin-right: auto;
+    user-select: none;
 }
 
 .mini-calendar-header {
