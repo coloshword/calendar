@@ -17,6 +17,7 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
             <MiniCalendar
                 currentMonth={viewDate}
                 today={today}
+                viewDate={viewDate}
                 setViewDate={setViewDate}
             />
         </div>

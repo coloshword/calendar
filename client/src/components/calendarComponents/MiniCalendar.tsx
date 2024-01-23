@@ -6,9 +6,10 @@ import arrowRight from '../../assets/arrow-right.svg';
 interface MiniCalendarProps {
     currentMonth: Date;
     today: Date,
+    viewDate: Date;
     setViewDate: Function;
 }
-const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth, today, setViewDate}) => {
+const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth, today, viewDate, setViewDate}) => {
 
     const [viewMonth, setViewMonth] = useState(new Date(currentMonth.getFullYear(), currentMonth.getMonth()));
 
@@ -71,29 +72,42 @@ const MiniCalendar: FC<MiniCalendarProps> = ({currentMonth, today, setViewDate})
         let first = getFirst(viewMonth);
         indexToDate[first.getDay()] = [first.getMonth(), first.getDate(), first.getFullYear(), 1];
         let lastOfLastMonth = getLast(new Date(first.getFullYear(),first.getMonth() - 1));
+        let cellClass: string[] = []; // array of the correct classes for each cell, based on the index 
         // populate the last month dates 
         for(let i = 0; i < first.getDay(); i++) {
-            indexToDate[i] = [lastOfLastMonth.getMonth(), lastOfLastMonth.getDate() - (first.getDay() - i) + 1, lastOfLastMonth.getFullYear(), 0]
+            indexToDate[i] = [lastOfLastMonth.getMonth(), lastOfLastMonth.getDate() - (first.getDay() - i) + 1, lastOfLastMonth.getFullYear()];
+            cellClass.push('otherMonth-cell');
         }
         //populate this month dates 
         let daysInCurMonth = numDays(first.getMonth(), first.getFullYear());
         let offset = first.getDay();
-        for(let i = 1; i < daysInCurMonth; i++) {
-            indexToDate[offset + i] = [first.getMonth(), first.getDate() + i, first.getFullYear(), 1];
+        for(let i = 0; i < daysInCurMonth; i++) {
+            indexToDate[offset + i] = [first.getMonth(), first.getDate() + i, first.getFullYear()];
+            cellClass.push('week-cell');
         }
         // populate the rest of the month dates 
         let calendarLength: number = Object.keys(indexToDate).length;
         let nextMonth = getNext(first);
         for(let i = 0; i < 42 - calendarLength; i++) {
-            indexToDate[i + calendarLength] = [nextMonth.getMonth(), nextMonth.getDate() + i, nextMonth.getFullYear(), 0];
+            indexToDate[i + calendarLength] = [nextMonth.getMonth(), nextMonth.getDate() + i, nextMonth.getFullYear()];
+            cellClass.push('otherMonth-cell');
+        }
+        
+        if(viewDate.getFullYear() == first.getFullYear() && viewDate.getMonth() == first.getMonth()) {
+            cellClass[offset + viewDate.getDate() - 1] = 'mini-calendar-view-date'
+        }
+
+        if(today.getFullYear() == first.getFullYear() && today.getMonth() == first.getMonth()) {
+            // we know we are in today's month 
+            // get the index by adding offset plus todays date 
+            cellClass[offset + today.getDate() - 1] = 'mini-calendar-today';
         }
         // create the grid 
-
         const renderCells = (row: number) => {
             const elementsInRow = [];
             for(let i = 0; i < 7; i++) {
                 elementsInRow.push(
-                    <td onClick={() => handleCalendarCellClick(indexToDate[row* 7 + i])}className={(indexToDate[row * 7 + i][3] == 1) ? "week-cell" : "otherMonth-cell"} key={i}>
+                    <td onClick={() => handleCalendarCellClick(indexToDate[row* 7 + i])}className={cellClass[row * 7 + i]} key={i}>
                         {/* get the date of the correct cell*/}
                         {indexToDate[row * 7 + i][1]} 
                     </td>

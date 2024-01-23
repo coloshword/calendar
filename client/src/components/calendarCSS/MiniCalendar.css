@@ -79,3 +79,18 @@ td {
     font-weight: 500;
     color: #877f8d;
 }
+
+.mini-calendar-today {
+    background-color: #643B9F;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
+.mini-calendar-view-date {
+    background-color: #F6CEFC;
+    color: #111012;
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
