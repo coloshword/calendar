@@ -41,4 +41,14 @@ function run() {
         }
     });
 }
+// Endpoint to get questions by a specific user
+app.get('/record/wow', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.json({ 'hello': 'world' });
+    }
+    catch (error) {
+        console.error('Error fetching questions by user:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}));
 run().catch(console.dir);

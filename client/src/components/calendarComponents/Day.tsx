@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect, useRef } from 'react';
 import { AddEvent } from './AddEvent';
 import '../calendarCSS/Day.css';
 import {EventModal} from './EventModal';
+import axios from 'axios';
 
 
 const dayNames = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -52,6 +53,17 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             // If showModal is false, reset dragEvent to null.
             setDragEvent(null);
         }
+        console.log("wjat");
+        async function fetch() {
+            try {
+                let response = await axios.get('http://localhost:3000/record/wow');
+                console.log(response.data);
+            }   
+            catch {
+                console.log("could not get message");
+            }
+        }
+        fetch();
     }, [events, dayGridRef, showModal]);
 
     const renderDate = () => {

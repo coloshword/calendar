@@ -30,4 +30,15 @@ async function run() {
     }
 }
 
+// this endpoint works 
+app.get('/record/wow', async (req, res) => {
+    try {
+        res.json({'hello': 'world'});
+    } catch (error) {
+        console.error('Error fetching questions by user:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
 run().catch(console.dir);

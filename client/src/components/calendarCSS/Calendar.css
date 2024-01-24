@@ -12,8 +12,8 @@
 }
 
 .header-icon {
-    height: 4rem;
-    width: 4rem;
+    height: 3rem;
+    width: 3rem;
 }
 
 .sidebar-icon {
@@ -27,12 +27,12 @@
 .logo-text-container {
     display: flex;
     align-items:center;
+    margin-left: 3rem;
 }
 
 
 .icon-name {
     font-size: 1.4rem;
-    margin-left: -0.5rem;
 }
 
 .calendar-body { 
@@ -42,7 +42,7 @@
 }
 
 .next-prev-btn-container {
-    margin-left: 10%;
+    margin-left: 4rem;
     align-items: center;
     display: flex;
     flex-direction: row;
