@@ -15,9 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = (0, express_1.default)();
 const port = 3500;
+const saltRounds = 5;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const client = new mongodb_1.MongoClient(uri, {
@@ -42,23 +44,20 @@ function run() {
         }
     });
 }
-// this endpoint works 
-app.get('/record/wow', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        res.json({ 'hello': 'world' });
-    }
-    catch (error) {
-        console.error('Error fetching questions by user:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-}));
 //post: register
 app.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log(req.body);
+        const { email, password } = req.body;
+        const events = [];
+        const hashedPassword = yield bcrypt_1.default.hash(password, saltRounds);
+        const newUser = { email, hashedPassword, events };
+        const userCollection = client.db('lightCalendar').collection('Users');
+        const result = yield userCollection.insertOne(newUser);
+        console.log(result);
     }
     catch (error) {
         console.error("Failed to register user " + error);
+        res.send(error);
     }
 }));
 run().catch(console.dir);
