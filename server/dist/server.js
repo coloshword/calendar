@@ -17,8 +17,9 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = (0, express_1.default)();
-const port = 3000;
+const port = 3500;
 app.use((0, cors_1.default)());
+app.use(express_1.default.json());
 const client = new mongodb_1.MongoClient(uri, {
     serverApi: {
         version: mongodb_1.ServerApiVersion.v1,
@@ -41,7 +42,7 @@ function run() {
         }
     });
 }
-// Endpoint to get questions by a specific user
+// this endpoint works 
 app.get('/record/wow', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.json({ 'hello': 'world' });
@@ -49,6 +50,15 @@ app.get('/record/wow', (req, res) => __awaiter(void 0, void 0, void 0, function*
     catch (error) {
         console.error('Error fetching questions by user:', error);
         res.status(500).json({ message: 'Internal Server Error' });
+    }
+}));
+//post: register
+app.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.body);
+    }
+    catch (error) {
+        console.error("Failed to register user " + error);
     }
 }));
 run().catch(console.dir);

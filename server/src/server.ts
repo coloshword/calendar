@@ -4,8 +4,9 @@ import cors from 'cors';
 
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
-const port = 3000;
+const port = 3500;
 app.use(cors());
+app.use(express.json());
 
 
 
@@ -40,5 +41,14 @@ app.get('/record/wow', async (req, res) => {
     }
 });
 
+//post: register
+app.post('/register', async (req, res) => {
+    try {
+        console.log(req.body);
+    } catch(error) {
+        console.error("Failed to register user " + error);
+        res.send(error);
+    }
+})
 
 run().catch(console.dir);
