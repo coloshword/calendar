@@ -60,4 +60,18 @@ app.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.send(error);
     }
 }));
+//post: login
+app.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { email, password } = req.body;
+        // hash the login password 
+        let hashedLoginPass = yield bcrypt_1.default.hash(password, saltRounds);
+        // get the hashed password with the associated email
+        let returnedObj = client.db('lightCalendar').collection('Users').find({ email: email });
+        console.log(returnedObj);
+    }
+    catch (_a) {
+        res.send('Incorrect password');
+    }
+}));
 run().catch(console.dir);

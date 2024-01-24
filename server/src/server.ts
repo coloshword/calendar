@@ -47,6 +47,21 @@ app.post('/register', async (req, res) => {
         console.error("Failed to register user " + error);
         res.send(error);
     }
+});
+
+//post: login
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        // hash the login password 
+        let hashedLoginPass = await bcrypt.hash(password, saltRounds);
+        // get the hashed password with the associated email
+        let returnedObj = client.db('lightCalendar').collection('Users').find(
+            {email: email}
+        );
+    } catch {
+        res.send('Incorrect password');
+    }
 })
 
 run().catch(console.dir);
