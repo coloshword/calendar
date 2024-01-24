@@ -11,6 +11,8 @@
 # production
 /build
 
+/client/build
+
 #client
 client/node_modules/
 
