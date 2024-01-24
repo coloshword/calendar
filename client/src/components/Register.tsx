@@ -25,7 +25,7 @@ const Register = ({}) => {
         try {
             console.log("post request");
             // verify inputs
-            axios.post('http://localhost:3500/register', {
+            let response = await axios.post('http://localhost:3500/register', {
                 email: email,
                 password: password
             });
