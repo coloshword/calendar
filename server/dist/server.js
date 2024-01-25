@@ -62,16 +62,30 @@ app.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* 
 }));
 //post: login
 app.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { email, password } = req.body;
-        // hash the login password 
-        let hashedLoginPass = yield bcrypt_1.default.hash(password, saltRounds);
-        // get the hashed password with the associated email
-        let returnedObj = client.db('lightCalendar').collection('Users').find({ email: email });
-        console.log(returnedObj);
+    const { email, password } = req.body;
+    const usersCollection = client.db('lightCalendar').collection('Users');
+    var user = yield usersCollection.findOne({ email: email });
+    if (!user) {
+        res.status(404).json({ msg: "There is no account associated with this email" });
     }
-    catch (_a) {
-        res.send('Incorrect password');
+    else {
+        // const match = await bcrypt.compare(password, user.password);
+        // if(match) {
+        //     res.status(200).json({msg: "Successful login"});
+        // } else {
+        //     res.status(400).json({msg: "Password is incorrect"});
+        // }
+        bcrypt_1.default.compare(password, user.hashedPassword, function (err, result) {
+            if (err) {
+                throw err;
+            }
+            else if (result) {
+                res.status(200).json({ msg: "Successful login" });
+            }
+            else {
+                res.status(400).json({ msg: "Password is incorrect" });
+            }
+        });
     }
 }));
 run().catch(console.dir);

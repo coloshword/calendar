@@ -12,6 +12,7 @@ app.use(express.json());
 
 
 
+
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -25,6 +26,7 @@ async function run() {
         await client.connect();
         await client.db("admin").command({ ping: 1 });
         console.log("successfully connected to mongodb");
+
         app.listen(port, () => {   
             console.log(`server listening on port ${port}`);
         })
@@ -51,16 +53,28 @@ app.post('/register', async (req, res) => {
 
 //post: login
 app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        // hash the login password 
-        let hashedLoginPass = await bcrypt.hash(password, saltRounds);
-        // get the hashed password with the associated email
-        let returnedObj = client.db('lightCalendar').collection('Users').find(
-            {email: email}
-        );
-    } catch {
-        res.send('Incorrect password');
+    const { email, password } = req.body;
+    const usersCollection = client.db('lightCalendar').collection('Users');
+    var user = await usersCollection.findOne({ email: email});
+    if(!user) {
+        res.status(404).json({msg: "There is no account associated with this email"});
+    } else {
+        // const match = await bcrypt.compare(password, user.password);
+        // if(match) {
+        //     res.status(200).json({msg: "Successful login"});
+        // } else {
+        //     res.status(400).json({msg: "Password is incorrect"});
+        // }
+        bcrypt.compare(password, user.hashedPassword, function(err, result) {
+            if(err) {
+                throw err;
+            } 
+            else if(result) {
+                res.status(200).json({ msg: "Successful login" });
+            } else {
+                res.status(400).json({ msg: "Password is incorrect" });
+            }
+        });
     }
 })
 
