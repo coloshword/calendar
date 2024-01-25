@@ -53,6 +53,7 @@ const Register = ({}) => {
                     className="register-btn"
                     onClick={() => submitRegister()}
                     >Register</button>
+                <a href="http://localhost:3000/login"> Sign in</a>
                 <div className="register-footer"></div>
             </div>
         </div>

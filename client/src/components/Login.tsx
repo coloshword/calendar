@@ -2,21 +2,24 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import './calendarCSS/Register.css';
 import logo from '../assets/icon.png';
+import { ServerResponse } from "http";
 
 const Login = ({}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     async function handleLogin() {
+        let response;
         try {
             console.log("post request");
-            let response = await axios.post('http://localhost:3500/login', {
+            response = await axios.post('http://localhost:3500/login', {
                 email: email,
                 password: password
             });
             console.log(response);
-        }catch(error) {
-            console.log(error);
+        }
+        catch(error) {
+            if(axios.isAxiosError(error)) console.log(error.response!.data.msg);
         }
     }
 
@@ -36,6 +39,7 @@ const Login = ({}) => {
                     className="register-btn"
                     onClick={() => handleLogin()}
                     >Login</button>
+                <a href="http://localhost:3000/register" className="link">Don't have an account? Register</a>
                 <div className="register-footer"></div>
             </div>
         </div>
