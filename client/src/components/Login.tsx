@@ -16,7 +16,8 @@ const Login = ({}) => {
                 email: email,
                 password: password
             });
-            console.log(response);
+            console.log(response.data.email);
+            console.log(response.data.token);
         }
         catch(error) {
             if(axios.isAxiosError(error)) console.log(error.response!.data.msg);

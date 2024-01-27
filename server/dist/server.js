@@ -16,6 +16,7 @@ const mongodb_1 = require("mongodb");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = (0, express_1.default)();
 const port = 3500;
@@ -69,18 +70,21 @@ app.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(404).json({ msg: "There is no account associated with this email" });
     }
     else {
-        // const match = await bcrypt.compare(password, user.password);
-        // if(match) {
-        //     res.status(200).json({msg: "Successful login"});
-        // } else {
-        //     res.status(400).json({msg: "Password is incorrect"});
-        // }
         bcrypt_1.default.compare(password, user.hashedPassword, function (err, result) {
             if (err) {
                 throw err;
             }
             else if (result) {
-                res.status(200).json({ msg: "Successful login" });
+                if (user) {
+                    const token = jsonwebtoken_1.default.sign({
+                        userId: user._id,
+                        userEmail: user.email
+                    }, "RANDOM-TOKEN", { expiresIn: "24h" });
+                    res.status(200).json({ msg: "Successful login", email: user.email, token: token });
+                }
+                else {
+                    console.log("unknown db error, user not found");
+                }
             }
             else {
                 res.status(400).json({ msg: "Password is incorrect" });
