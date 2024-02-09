@@ -2,11 +2,12 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import './calendarCSS/Register.css';
 import logo from '../assets/icon.png';
-import { ServerResponse } from "http";
+import { useNavigate } from 'react-router-dom'
 
 const Login = ({}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     async function handleLogin() {
         let response;
@@ -18,6 +19,9 @@ const Login = ({}) => {
             });
             console.log(response.data.email);
             console.log(response.data.token);
+            // save jwt token
+            localStorage.setItem('token', response.data.token);
+            navigate('/calendar')
         }
         catch(error) {
             if(axios.isAxiosError(error)) console.log(error.response!.data.msg);

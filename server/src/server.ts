@@ -22,9 +22,11 @@ const client = new MongoClient(uri, {
 });
 
 async function run() {
+    console.log("Attempting to connect to MongoDB...");
     try {
         await client.connect();
         await client.db("admin").command({ ping: 1 });
+
         console.log("successfully connected to mongodb");
 
         app.listen(port, () => {   
@@ -88,4 +90,7 @@ app.post('/login', async (req, res) => {
     }
 })
 
-run().catch(console.dir);
+run().catch(error => {
+    console.error("Error starting the server:", error);
+    process.exit(1); // Exit the process with an error code
+});

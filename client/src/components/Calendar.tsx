@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext } from "react";
+import React, { FC, useState, useEffect } from "react";
 import './calendarCSS/Calendar.css';
 import headerIcon from '../assets/icon.png';
 import sideBar from '../assets/sidebar.svg'
@@ -16,6 +16,10 @@ const Calendar: FC = ({}) => {
     const [showLeftBar, setShowLeftBar] = useState(true);
     /* State to show addEvent modal (to be passed) */
     const [showModal, setShowModal] = useState(false);
+    
+    useEffect(() => {
+        
+    })
     /* nextPrevDateBtns: Renders the next date and prev date buttons */
     const nextPrevDateBtns = () => {
         return(
