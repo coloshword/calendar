@@ -51,7 +51,17 @@ app.post('/register', async (req, res) => {
         const newUser = { email, hashedPassword, events };
         const userCollection = client.db('lightCalendar').collection('Users');
         const result = await userCollection.insertOne(newUser);
-        console.log(result);
+        const userId = result.insertedId; // userID is returned upon successful user creaition
+        // successful, also do a login with a token
+        if(userId) {
+            const token = jwt.sign({
+                userId: userId,
+                userEmail: email,
+                
+            }, "RANDOM-TOKEN", { expiresIn: "24h"});
+            res.status(201).json({msg: "Registration successful", email: email, token: token})
+        }
+
     } catch(error) {
         console.error("Failed to register user " + error);
         res.send(error);
