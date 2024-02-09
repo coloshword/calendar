@@ -2,11 +2,13 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import './calendarCSS/Register.css';
 import logo from '../assets/icon.png';
+import { useNavigate } from 'react-router-dom'
 
 const Register = ({}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
 
     /** verifyInputs: verifies the inputs of the register form. Returns the empty string if no issue, otherwise returns the error as string */
     function verifyInputs() : string {
@@ -23,18 +25,18 @@ const Register = ({}) => {
             return; 
         }
         try {
-            console.log("post request");
             // verify inputs
             let response = await axios.post('http://localhost:3500/register', {
                 email: email,
                 password: password
             });
+            console.log(response.data.token);
+            //save token and redirect just as if logged in
+            localStorage.setItem('token', response.data.token);
+            navigate('/calendar');
         }catch(error) {
             console.error("Failed to register user ", error);
         }
-        // console.log(`email ${email}`);
-        // console.log(`password ${password}`);
-        // console.log(`confirm password ${confirmPassword}`);
     }
     return(
         <div className="register-page">

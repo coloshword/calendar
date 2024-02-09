@@ -21,7 +21,7 @@ const Login = ({}) => {
             console.log(response.data.token);
             // save jwt token
             localStorage.setItem('token', response.data.token);
-            navigate('/calendar')
+            navigate('/calendar');
         }
         catch(error) {
             if(axios.isAxiosError(error)) console.log(error.response!.data.msg);

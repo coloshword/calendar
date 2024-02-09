@@ -53,7 +53,6 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             // If showModal is false, reset dragEvent to null.
             setDragEvent(null);
         }
-        console.log("wjat");
         async function fetch() {
             try {
                 let response = await axios.get('http://localhost:3000/record/wow');

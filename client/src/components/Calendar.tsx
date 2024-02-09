@@ -4,6 +4,7 @@ import headerIcon from '../assets/icon.png';
 import sideBar from '../assets/sidebar.svg'
 import { LeftSidebar } from "./calendarComponents/LeftSidebar"
 import { CalendarDisplay } from "./calendarComponents/CalendarDisplay";
+import { useAuth } from '../components/AuthProvider'
 import leftBtn from "../assets/arrow-left.svg";
 import rightBtn from "../assets/arrow-right.svg";
 /*
@@ -16,9 +17,14 @@ const Calendar: FC = ({}) => {
     const [showLeftBar, setShowLeftBar] = useState(true);
     /* State to show addEvent modal (to be passed) */
     const [showModal, setShowModal] = useState(false);
+    const { isLoggedIn, isGuest } = useAuth();
     
     useEffect(() => {
-        
+        if( isGuest || !isLoggedIn) {
+            console.log("You are not logged in ")
+        } else {
+            console.log(" you are logged in " + localStorage.getItem('token'));
+        }
     })
     /* nextPrevDateBtns: Renders the next date and prev date buttons */
     const nextPrevDateBtns = () => {
