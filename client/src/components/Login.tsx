@@ -28,6 +28,13 @@ const Login = ({}) => {
         }
     }
 
+    /** handleKeyDown: handles pressing of enter as submit  */
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleLogin();
+        }
+    }
+
     return(
         <div className="register-page">
             <div className="register-modal card">
@@ -37,8 +44,19 @@ const Login = ({}) => {
                 </div>
                 <span className="register-text">Login</span>
                 <div className="register-input-fields">
-                    <input className="register-input" placeholder="Email" onChange={(e) => setEmail(e.target.value)}></input>
-                    <input type="password" placeholder="Password" className="register-input" onChange={(e) => setPassword(e.target.value)}></input>
+                    <input 
+                        className="register-input" 
+                        placeholder="Email" 
+                        onChange={(e) => setEmail(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    ></input>
+                    <input 
+                        type="password" 
+                        placeholder="Password" 
+                        className="register-input" 
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    ></input>
                 </div>
                 <button
                     className="register-btn"

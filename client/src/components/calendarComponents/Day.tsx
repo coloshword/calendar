@@ -85,6 +85,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         let distanceBtHrs = (document.querySelectorAll('.hour-line')[1].getBoundingClientRect().top - domRect.top) - offset;
         let ans = (hr * distanceBtHrs) + (minute / 60) * distanceBtHrs + offset;
         return ans;
+        
     }
 
     /* getTimeFromPos: given a position, returns the time (hr, minute) */
@@ -159,7 +160,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         if (isDragging && dragEvent) {
             const currentPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
             const [hr, minute] = getTimeFromPos(currentPos, domRect!);
-            let snappedPos = getPosFromTime(hr, minute, domRect!); // pass domRect as the third argument
+            let snappedPos = getPosFromTime(hr, minute, domRect!); 
             setDragEvent({ ...dragEvent, height: snappedPos - dragEvent.top });
         }
     }
@@ -169,9 +170,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         // Snap start and end times to the nearest 15 minutes
         if(dragEvent) {
             const start = getTimeFromPos(dragEvent!.top, domRect!);
-
             const end = getTimeFromPos(dragEvent!.top + dragEvent!.height, domRect!);
-
         
             setIsDragging(false);
             setDefaultModalStart(start);

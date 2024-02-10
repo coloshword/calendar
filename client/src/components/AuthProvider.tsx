@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
     isLoggedIn: boolean;
@@ -7,7 +6,7 @@ interface AuthContextType {
     isGuest: boolean;
     setIsGuest: (value: boolean) => void;
     userEmail: string | null;
-    setUserEmail: (value: string | null) => void; // Adjusted for nullability
+    setUserEmail: (value: string | null) => void; 
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -24,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null); 
-  const navigate = useNavigate();
+  
   useEffect(() => {
     const token = localStorage.getItem('token');
     const guest = localStorage.getItem('isGuest') === 'true'; 
@@ -38,7 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoggedIn(false);
     setIsGuest(false);
     setUserEmail(null);
-    navigate('/');
   }
 
   return (

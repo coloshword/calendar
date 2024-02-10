@@ -7,6 +7,7 @@ import { CalendarDisplay } from "./calendarComponents/CalendarDisplay";
 import { useAuth } from '../components/AuthProvider'
 import leftBtn from "../assets/arrow-left.svg";
 import rightBtn from "../assets/arrow-right.svg";
+import personCircle from '../assets/person-circle.svg'
 /*
 * Parent level component for application 
 */
@@ -73,6 +74,9 @@ const Calendar: FC = ({}) => {
                     <span className="icon-name">Calendar</span>
                 </div>
                 {nextPrevDateBtns()}
+                <button className="user-btn">
+                    <img className="user-circle"src={personCircle}></img>
+                </button>
             </div>
             <div className="calendar-body">
                 {showLeftBar && 

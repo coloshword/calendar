@@ -18,6 +18,13 @@ const Register = ({}) => {
         return '';
     }
 
+        /** handleKeyDown: handles pressing of enter as submit  */
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            submitRegister();
+        }
+    }
+
     async function submitRegister() {
         let isValid:string = verifyInputs(); 
         if(isValid != '') {
@@ -48,8 +55,8 @@ const Register = ({}) => {
                 <span className="register-text">Register</span>
                 <div className="register-input-fields">
                     <input className="register-input" placeholder="Email" onChange={(e) => setEmail(e.target.value)}></input>
-                    <input type="password" className="register-input" placeholder="Password" onChange={(e) => setPassword(e.target.value)}></input>
-                    <input type="password" className="register-input" placeholder="Confirm" onChange={(e) => setConfirmPassword(e.target.value)}></input>
+                    <input type="password" className="register-input" placeholder="Password" onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></input>
+                    <input type="password" className="register-input" placeholder="Confirm" onChange={(e) => setConfirmPassword(e.target.value) } onKeyDown={handleKeyDown}></input>
                 </div>
                 <button 
                     className="register-btn"

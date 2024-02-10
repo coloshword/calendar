@@ -89,3 +89,13 @@
 .calendar-header {
     user-select: none;
 }
+
+.user-btn {
+    all: unset;
+    margin-left: 65%
+}
+
+.user-circle {
+    width: 1.5rem;
+    height: 1.5rem;
+}
