@@ -10,10 +10,9 @@
     border-radius: 0.5rem;
     background-color: white;
     min-height: 5rem;
-    padding: 1rem;
     max-height: 80%; 
     display: flex;
-    width: 30rem;
+    width: 25rem;
 }
 
 .event-details-time {
@@ -32,3 +31,23 @@
     font-size: 0.9rem;
 }
 
+.event-details-modal-header {
+    width: 100%;
+    height: 1.5rem;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.event-details-body {
+    padding: 0rem 1rem 1rem 1rem;
+}
+
+.event-details-modal-close {
+    margin-left: 94%;
+    cursor: pointer;
+}
+
+.event-description {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}

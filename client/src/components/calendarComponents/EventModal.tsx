@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import '../calendarCSS/EventModal.css';
+import xIcon from '../../assets/x.svg'
 
 interface Event {
     title: string;
@@ -7,6 +8,7 @@ interface Event {
     start: [number, number];
     end: [number, number];
     descript: string;
+    eventColor: string;
 }
 
 interface EventModalProps {
@@ -36,9 +38,19 @@ const EventModal: FC<EventModalProps> = ({currentEvent, setShowModal}) => {
     }
     return (
         <div className="event-details-modal">
-            <div className="event-details-time">
-                <span className="event-details-title"> {currentEvent.title} </span>
-                <span> {`${currentEvent.date.toDateString()} ⋅ ${formatTime(currentEvent.start)} - ${formatTime(currentEvent.end)}`} </span>
+            <div className="event-details-modal-header" style={{backgroundColor: currentEvent.eventColor}}>
+                <img className="event-details-modal-close" src={xIcon} onClick={() => setShowModal(false)}></img>
+            </div>
+            <div className="event-details-body">
+                <div className="event-details-time">
+                    <span className="event-details-title"> {currentEvent.title} </span>
+                    <span> {`${currentEvent.date.toDateString()} ⋅ ${formatTime(currentEvent.start)} - ${formatTime(currentEvent.end)}`} </span>
+                </div>
+                {currentEvent.descript != '' &&
+                    <div className="event-description">
+                    {currentEvent.descript}
+                    </div>
+                }
             </div>
         </div>
     )
