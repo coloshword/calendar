@@ -60,8 +60,9 @@ app.post('/register', async (req, res) => {
     try {
         const {email, password} = req.body;
         const events: string[] = [];
+        const notes: Object = {};
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const newUser = { email, hashedPassword, events };
+        const newUser = { email, hashedPassword, events, notes };
         const userCollection = client.db('lightCalendar').collection('Users');
         const result = await userCollection.insertOne(newUser);
         const userId = result.insertedId; // userID is returned upon successful user creaition
@@ -171,7 +172,52 @@ app.get('/get-events', authMiddleware, async (req, res) => {
     }
 });
 
+/** update-note endpoint: updates the note object for a given user  */
+app.post('/update-note', authMiddleware, async (req, res) => {
+    if(!req.user) {
+        return res.status(401).json({ message: "Unauthorized access of notes"});
+    }
+    const noteObj = req.body;
+    const userId = req.user.userId; 
+    // get user from the userId 
+    if(noteObj) {
+        try {
+            const userCollection = client.db('lightCalendar').collection('Users');
+            let update = await userCollection.updateOne(
+                {_id: new ObjectId(userId)},
+                { $set: {notes: noteObj}}
+            );
+            if(update.modifiedCount == 1) res.status(200).json({message: "note added successfully"});
+            else res.status(404).json({message: "User not found when updating note"});
+        }catch (error) {
+            res.status(500).json({message: error});
+        }
+    }
+});
 
+/** get-note endpoint: gets the node object for a given user to be loaded into client */
+app.get('/get-note', authMiddleware, async(req, res) => {
+    if(!req.user) {
+        return res.status(401).json({ message: "Unauthorized access of user notes"});
+    }
+    const userId = req.user.userId;
+
+    try {
+        const db = client.db("lightCalendar");
+        const usersCollection = db.collection("Users");
+        const user = await usersCollection.findOne({_id: new ObjectId(userId)});
+
+        if(user) {
+            res.status(200).json({message: user.notes});
+        } else {
+            // user not found
+            res.status(404).json({message: "Could not find user in db when getting note"});
+        }
+    }
+    catch(error) {
+        res.status(500).json({message : error});
+    }
+});
 
 run().catch(error => {
     console.error("Error starting the server:", error);

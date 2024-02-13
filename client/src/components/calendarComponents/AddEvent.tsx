@@ -59,8 +59,7 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
     /** updateUSerEvents: updates user's event field with new event  */
     async function updateUserEvents(eventData: Event) {
         try {
-            console.log("Creating new event in the backend");
-            const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+            const token = localStorage.getItem('token'); 
             const response = await axios.post('http://localhost:3500/add-event', eventData, {
                 headers: {
                     Authorization: `Bearer ${token}`

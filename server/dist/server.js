@@ -56,8 +56,9 @@ app.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const { email, password } = req.body;
         const events = [];
+        const notes = {};
         const hashedPassword = yield bcrypt_1.default.hash(password, saltRounds);
-        const newUser = { email, hashedPassword, events };
+        const newUser = { email, hashedPassword, events, notes };
         const userCollection = client.db('lightCalendar').collection('Users');
         const result = yield userCollection.insertOne(newUser);
         const userId = result.insertedId; // userID is returned upon successful user creaition
@@ -152,6 +153,50 @@ app.get('/get-events', auth_1.authMiddleware, (req, res) => __awaiter(void 0, vo
     catch (error) {
         console.error("Failed to get events:", error);
         res.status(500).json({ message: "Failed to get events" });
+    }
+}));
+/** update-note endpoint: updates the note object for a given user  */
+app.post('/update-note', auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized access of notes" });
+    }
+    const noteObj = req.body;
+    const userId = req.user.userId;
+    // get user from the userId 
+    if (noteObj) {
+        try {
+            const userCollection = client.db('lightCalendar').collection('Users');
+            let update = yield userCollection.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { $set: { notes: noteObj } });
+            if (update.modifiedCount == 1)
+                res.status(200).json({ message: "note added successfully" });
+            else
+                res.status(404).json({ message: "User not found when updating note" });
+        }
+        catch (error) {
+            res.status(500).json({ message: error });
+        }
+    }
+}));
+/** get-note endpoint: gets the node object for a given user to be loaded into client */
+app.get('/get-note', auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized access of user notes" });
+    }
+    const userId = req.user.userId;
+    try {
+        const db = client.db("lightCalendar");
+        const usersCollection = db.collection("Users");
+        const user = yield usersCollection.findOne({ _id: new mongodb_1.ObjectId(userId) });
+        if (user) {
+            res.status(200).json({ message: user.notes });
+        }
+        else {
+            // user not found
+            res.status(404).json({ message: "Could not find user in db when getting note" });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: error });
     }
 }));
 run().catch(error => {
