@@ -14,8 +14,10 @@ interface LeftSidebarProps {
 /** The left side bar also has notes, it handles everything within the left sidebar */
 const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, setViewDate, today }) => {
     const [note, setNote] = useState('');
-    const [notes, setNotes] = useState<{ [date: string]: string }>({});  // NOTE: the key, date is of string type but is actually a Date object's toDateString() output 
-    
+    const [notes, setNotes] = useState<{ [date: string]: string }>({});  // the key, date is of string type but is actually a Date object's toDateString() output 
+    const [saveNoteText, setSaveNoteText ] = useState('Save Note'); // store saveNote text 
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false); // disable the button from too many updates to the db
+    const [notesBtnClass, setNotesBtnClass] = useState('notes-btn-class');
     // effect to fetch notes from the database only on component mount
     useEffect(() => {
         getNotes();
@@ -47,13 +49,6 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
         setNote(str);
     }
 
-    /** saveNote: Event handler to save the note by sending it to the db also updating the notes dict  */
-    function saveNote() {
-        notes[viewDate.toDateString()] = note;
-        // try to update note object in the db
-        updateDateNote(notes);
-    }
-
     /** updateDateNote: attempts to update the notes object for the user in the db  */
     async function updateDateNote(note: Object) {
         try {
@@ -68,6 +63,25 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
             console.log("Failed to add note ", error);
         }
     }
+
+    /** handleSaveNote: handles clicking the save note button by saving the note and also changing appearance for confirmation */
+    function handleSaveNote() {
+        // check if notes changed
+        if(notes[viewDate.toDateString()] != note) {
+            notes[viewDate.toDateString()] = note;
+            // try to update note object in the db
+            updateDateNote(notes);
+        }
+        // change the appearance to match confirmation
+        setIsButtonDisabled(true);
+        setSaveNoteText('Note Saved!');
+        setNotesBtnClass('notes-btn-class-saved');
+        setTimeout(() => {
+            setSaveNoteText('Save Note');
+            setIsButtonDisabled(false);
+            setNotesBtnClass('notes-btn-class');
+        }, 1000);
+    }
     return (
         <div className="left-sidebar">
             {/* Add event sets modal state to (true) (show), which shows the modal*/}
@@ -80,7 +94,7 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
             />
             <div className="add-event-description-container">
                 <textarea placeholder="Add a note for this day" className="add-event-description" value = {note} onChange={(e) => handleNoteChange(e.target.value)}></textarea>
-                <button onClick={() => saveNote()}> Save Note</button>
+                <button className={notesBtnClass}onClick={() => handleSaveNote()} disabled={isButtonDisabled}>{ saveNoteText }</button>
             </div>
         </div>
     )
