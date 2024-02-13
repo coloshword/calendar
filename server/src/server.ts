@@ -1,9 +1,10 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import express from 'express';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {authMiddleware} from './auth'
+import { Request } from 'express';
 
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
@@ -12,6 +13,18 @@ const saltRounds = 5;
 app.use(cors());
 app.use(express.json());
 
+/** auth middleware support */
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: { userId: string; userEmail?: string };
+  }
+}
+
+/** Event query */
+type EventQuery = {
+    userId: ObjectId;
+    [key: string]: any; 
+};
 
 const client = new MongoClient(uri, {
     serverApi: {
@@ -100,7 +113,67 @@ app.post('/login', async (req, res) => {
     }
 })
 
+app.post('/add-event', authMiddleware, async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { title, date, start, end, descript, eventColor } = req.body;
+    const userId = req.user.userId;
+
+    try {
+        const eventCollection = client.db('lightCalendar').collection('Events');
+        const { insertedId: eventId } = await eventCollection.insertOne({
+            userId,
+            title,
+            date,
+            start,
+            end,
+            descript,
+            eventColor
+        });
+
+        const userCollection = client.db('lightCalendar').collection('Users');
+        await userCollection.updateOne(
+            { _id: new ObjectId(userId) },
+            { $push: { events: eventId } }
+        );
+
+        res.status(201).json({ message: "Event added successfully" });
+    } catch (error) {
+        console.error("Failed to add event:", error);
+        res.status(500).json({ message: "Failed to add event" });
+    }
+});
+
+app.get('/get-events', authMiddleware, async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = req.user.userId;
+
+    try {
+        const db = client.db("lightCalendar");
+        const usersCollection = db.collection("Users");
+        const user = await usersCollection.findOne({_id: new ObjectId(userId)});
+        
+        if(user) {
+            const eventsCollection = db.collection("Events");
+            const events = await eventsCollection.find({
+                _id: { $in: user.events.map((eventId: string) => new ObjectId(eventId))}
+            }).toArray();
+            res.status(201).json({ events : events})
+        }
+    } catch (error) {
+        console.error("Failed to get events:", error);
+        res.status(500).json({ message: "Failed to get events" });
+    }
+});
+
+
+
 run().catch(error => {
     console.error("Error starting the server:", error);
-    process.exit(1); // Exit the process with an error code
+    process.exit(1); 
 });

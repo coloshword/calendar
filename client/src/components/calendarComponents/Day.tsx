@@ -53,22 +53,41 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             // If showModal is false, reset dragEvent to null.
             setDragEvent(null);
         }
-        async function fetch() {
-            try {
-                let response = await axios.get('http://localhost:3000/record/wow');
-                console.log(response.data);
-            }   
-            catch {
-                console.log("could not get message");
-            }
+        fetchEvents()
+    }, [dayGridRef, showModal]);
+
+    /** fetchEvents: fetch the events for a given user from the db if the user is logged in  */
+    async function fetchEvents() {
+        try {
+            const token = localStorage.getItem('token'); // Retrieve the token from local storage
+            if (!token) return; // Ensure there's a token present
+
+            const response = await axios.get('http://localhost:3500/get-events', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });            
+            let jsonEvents = response.data.events;
+            const events = jsonEvents.map((item: Event)  => {
+                return {
+                    title: item.title,
+                    date: new Date(item.date),
+                    start: item.start,
+                    end: item.end,
+                    descript: item.descript,
+                    eventColor: item.eventColor
+                }
+            })
+            setEvents(events);
+        } catch (error) {
+            console.error("Failed to fetch events:", error);
         }
-        fetch();
-    }, [events, dayGridRef, showModal]);
+    }
 
     const renderDate = () => {
         return (
             <div className="day-date-container">
-                <span>{dayNames[day.getDay()]}</span>
+                <span>{dayNames[day.getDay()]} </span>
                 <div className={(day.toDateString() == today.toDateString() ? "day-date-today" : "") + " day-date-circle"}>
                     {day.getDate()}
                 </div>
@@ -259,7 +278,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     return (
         <div className="day-container unselectable">
             {showModal && (
-                <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents} defaultModalDate={defaultModalDate} defaultModalStart={defaultModalStart} defaultModalEnd={defaultModalEnd} color={color} setColor={setColor}/>
+                <AddEvent setShowModal={setShowModal} events={events} setEvents={setEvents} defaultModalDate={defaultModalDate} defaultModalStart={defaultModalStart} defaultModalEnd={defaultModalEnd} color={color} setColor={setColor} refreshEvents={fetchEvents}/>
             )}
             {showEventModal && ( 
                 <EventModal currentEvent={currentEvent} setShowModal={setShowEventModal}/>

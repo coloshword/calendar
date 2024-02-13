@@ -106,7 +106,55 @@ app.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 }));
+app.post('/add-event', auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    const { title, date, start, end, descript, eventColor } = req.body;
+    const userId = req.user.userId;
+    try {
+        const eventCollection = client.db('lightCalendar').collection('Events');
+        const { insertedId: eventId } = yield eventCollection.insertOne({
+            userId,
+            title,
+            date,
+            start,
+            end,
+            descript,
+            eventColor
+        });
+        const userCollection = client.db('lightCalendar').collection('Users');
+        yield userCollection.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { $push: { events: eventId } });
+        res.status(201).json({ message: "Event added successfully" });
+    }
+    catch (error) {
+        console.error("Failed to add event:", error);
+        res.status(500).json({ message: "Failed to add event" });
+    }
+}));
+app.get('/get-events', auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    const userId = req.user.userId;
+    try {
+        const db = client.db("lightCalendar");
+        const usersCollection = db.collection("Users");
+        const user = yield usersCollection.findOne({ _id: new mongodb_1.ObjectId(userId) });
+        if (user) {
+            const eventsCollection = db.collection("Events");
+            const events = yield eventsCollection.find({
+                _id: { $in: user.events.map((eventId) => new mongodb_1.ObjectId(eventId)) }
+            }).toArray();
+            res.status(201).json({ events: events });
+        }
+    }
+    catch (error) {
+        console.error("Failed to get events:", error);
+        res.status(500).json({ message: "Failed to get events" });
+    }
+}));
 run().catch(error => {
     console.error("Error starting the server:", error);
-    process.exit(1); // Exit the process with an error code
+    process.exit(1);
 });

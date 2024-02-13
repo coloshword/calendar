@@ -3,6 +3,8 @@ import React, {Dispatch, FC, useState} from 'react';
 import '../calendarCSS/AddEvent.css';
 import closeIcon from '../../assets/x.svg';
 import dropDown from '../../assets/drop-down.svg';
+import axios from 'axios';
+
 interface Event {
     title: string;
     date: Date;
@@ -21,8 +23,9 @@ interface AddEventProps {
     defaultModalEnd: number[];
     color: string;
     setColor: Function;
+    refreshEvents: Function
 }
-const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultModalDate, defaultModalStart, defaultModalEnd, color, setColor}) => {
+const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultModalDate, defaultModalStart, defaultModalEnd, color, setColor, refreshEvents}) => {
     const [title, setTitle] = useState('');
     const formattedStartTime = formatTime(defaultModalStart);
     const formattedEndTime = formatTime(defaultModalEnd);
@@ -46,11 +49,29 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
             descript: descript,
             eventColor: color
         };
-        console.log(newEvent);
+        updateUserEvents(newEvent);
+
         setEvents([...events, newEvent]);
         setShowModal(false);
+        refreshEvents();
     }
 
+    /** updateUSerEvents: updates user's event field with new event  */
+    async function updateUserEvents(eventData: Event) {
+        try {
+            console.log("Creating new event in the backend");
+            const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+            const response = await axios.post('http://localhost:3500/add-event', eventData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log("Event added successfully:", response.data);
+        } catch (error) {
+            console.error("Failed to add event", error);
+        }
+    }    
+    
     function convertToMilitaryTime(timeStr: string): [number, number] {
         console.log(timeStr);
         const regex = /(\d{1,2}):(\d{2})\s*(am|pm)/i;
