@@ -9,7 +9,7 @@ const Register = ({}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const { setUserEmail } = useAuth();
+    const {setIsGuest, setIsLoggedIn, setUserEmail} = useAuth();
     const navigate = useNavigate();
 
     /** verifyInputs: verifies the inputs of the register form. Returns the empty string if no issue, otherwise returns the error as string */
@@ -42,6 +42,9 @@ const Register = ({}) => {
             console.log(response.data.token);
             //save token and redirect just as if logged in
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('email', response.data.email);
+            setIsLoggedIn(true);
+            setIsGuest(false);
             setUserEmail(response.data.email);
             navigate('/calendar');
         }catch(error) {

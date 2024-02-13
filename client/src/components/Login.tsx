@@ -8,8 +8,8 @@ import { useAuth } from "./AuthProvider";
 const Login = ({}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const {setIsGuest, setIsLoggedIn, setUserEmail} = useAuth();
     const navigate = useNavigate();
-    const { setUserEmail } = useAuth();
     async function handleLogin() {
         let response;
         try {
@@ -19,6 +19,9 @@ const Login = ({}) => {
                 password: password
             });
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('email', response.data.email);
+            setIsLoggedIn(true);
+            setIsGuest(false);
             setUserEmail(response.data.email);
             navigate('/calendar');
         }

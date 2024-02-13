@@ -20,11 +20,12 @@ const Calendar: FC = ({}) => {
     const [showUserTab, setShowUserTab] = useState(false);
     /* State to show addEvent modal (to be passed) */
     const [showModal, setShowModal] = useState(false);
-    const { isLoggedIn, isGuest } = useAuth();
+    const { isLoggedIn, isGuest, userEmail } = useAuth();
     
     useEffect(() => {
         if( isGuest || !isLoggedIn) {
             console.log("You are not logged in ")
+            console.log(userEmail);
         } else {
             console.log(" you are logged in " + localStorage.getItem('token'));
         }

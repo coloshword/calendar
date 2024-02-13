@@ -29,12 +29,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const guest = localStorage.getItem('isGuest') === 'true'; 
+    const email = localStorage.getItem('email');
     setIsLoggedIn(!!token);
     setIsGuest(guest); 
+    setUserEmail(email || 'Guest');
   }, []);
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('email');
     localStorage.setItem('isGuest', 'false'); 
     setIsLoggedIn(false);
     setIsGuest(false);
