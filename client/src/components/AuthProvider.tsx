@@ -5,8 +5,9 @@ interface AuthContextType {
     setIsLoggedIn: (value: boolean) => void; 
     isGuest: boolean;
     setIsGuest: (value: boolean) => void;
-    userEmail: string | null;
-    setUserEmail: (value: string | null) => void; 
+    userEmail: string;
+    setUserEmail: (value: string) => void; 
+    logout: () => void,
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -14,15 +15,16 @@ const AuthContext = createContext<AuthContextType>({
     setIsLoggedIn: () => {},
     isGuest: false,
     setIsGuest: () => {},
-    userEmail: null,
-    setUserEmail: () => {}
+    userEmail: 'Guest', // default value for auth provide if not logged in 
+    setUserEmail: () => {},
+    logout: () => {}, 
 });
 
 /** AuthProvider: context provider */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null); 
+  const [userEmail, setUserEmail] = useState<string>("Guest"); 
   
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -36,11 +38,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('isGuest', 'false'); 
     setIsLoggedIn(false);
     setIsGuest(false);
-    setUserEmail(null);
+    setUserEmail('Guest');
   }
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, isGuest, setIsGuest, userEmail, setUserEmail }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, isGuest, setIsGuest, userEmail, setUserEmail, logout}}>
       {children}
     </AuthContext.Provider>
   );

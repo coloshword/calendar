@@ -5,6 +5,7 @@ import sideBar from '../assets/sidebar.svg'
 import { LeftSidebar } from "./calendarComponents/LeftSidebar"
 import { CalendarDisplay } from "./calendarComponents/CalendarDisplay";
 import { useAuth } from '../components/AuthProvider'
+import { UserTab } from './calendarComponents/UserTab'
 import leftBtn from "../assets/arrow-left.svg";
 import rightBtn from "../assets/arrow-right.svg";
 import personCircle from '../assets/person-circle.svg'
@@ -16,6 +17,7 @@ const Calendar: FC = ({}) => {
     const [today, setToday] = useState(new Date());
     const [viewDate, setViewDate] = useState(today);
     const [showLeftBar, setShowLeftBar] = useState(true);
+    const [showUserTab, setShowUserTab] = useState(false);
     /* State to show addEvent modal (to be passed) */
     const [showModal, setShowModal] = useState(false);
     const { isLoggedIn, isGuest } = useAuth();
@@ -74,7 +76,8 @@ const Calendar: FC = ({}) => {
                     <span className="icon-name">Calendar</span>
                 </div>
                 {nextPrevDateBtns()}
-                <button className="user-btn">
+                <button className="user-btn"
+                onClick={() => setShowUserTab(!showUserTab)}>
                     <img className="user-circle"src={personCircle}></img>
                 </button>
             </div>
@@ -87,6 +90,7 @@ const Calendar: FC = ({}) => {
                     today={today}
                     setViewDate={setViewDate}
                 />}
+                { showUserTab && <UserTab setShowUserTab={setShowUserTab}/>}
                 <CalendarDisplay displayMode={displayMode} today={today} viewDate = {viewDate} showModal={showModal} setShowModal={setShowModal}/>
             </div>
         </div>

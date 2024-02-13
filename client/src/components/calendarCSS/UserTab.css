@@ -1,0 +1,38 @@
+.user-tab {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 3;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+    flex-direction: column;
+    border-radius: 0.5rem;
+    background-color: white;
+    display: flex;
+    padding: 0rem 1rem 1rem 1rem;
+}
+
+.user-tab-x-icon {
+    height: 1rem;
+    width: 1rem;
+    -webkit-filter: invert(70%); 
+    filter: invert(70%);
+    cursor: pointer;
+}
+
+.user-tab-icon {
+    height: 4rem;
+    width: 4rem;
+
+}
+
+.user-tab-header { 
+    margin-left: 90%;
+}
+
+.logged-in-text {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
