@@ -7,7 +7,12 @@ import "./calendarCSS/Home.css";
 
 /** Home page of the application */
 const Home = ({}) => {
-    const { setIsGuest } = useAuth();
+    const { setIsGuest, logout } = useAuth();
+
+    function handleSetGuest() {
+        setIsGuest(true);
+        logout(); // remove the token if it exists in local storage and logout 
+    }
     return(
         <div className="home-page">
             <div className="landing-image">
@@ -29,7 +34,7 @@ const Home = ({}) => {
                         </Link>
                     </div>
                     <Link to="/calendar" style={{ textDecoration: 'none' }}>
-                        <button  className="home-buttons guest-btn" onClick={ () => setIsGuest(true) }
+                        <button  className="home-buttons guest-btn" onClick={ () => handleSetGuest() }
                         >Continue as guest</button>
                     </Link>
                 </div>

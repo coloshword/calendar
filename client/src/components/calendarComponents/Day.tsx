@@ -23,6 +23,7 @@ interface Event {
     eventColor: string;
 }
 
+    
 interface DragEventDetails {
     top: number;
     height: number;
