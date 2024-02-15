@@ -1,0 +1,78 @@
+.home-redirect {
+    height: 100%;
+    width: 40%;
+    display: flex;
+    flex-direction:column;
+    margin-top: auto;
+    margin-bottom: auto;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+  }
+
+.home-page {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.landing-image {
+    width: 60%;
+}
+
+.home-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.title-name {
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.login-register-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.home-buttons {
+    all: unset;
+    background-color: #3c46ff;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+    border-radius: 0.2rem;
+}
+
+.home-buttons:hover {
+    background-color: #0000ff;
+}
+
+.login-register-btn {
+    padding: 0.8rem 4rem 0.8rem 4rem;
+    width: 4rem;
+}
+
+.guest-btn {
+    padding: 0.8rem 4rem 0.8rem 4rem;
+    width: 17rem;
+}
+
+@keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  .cursor-blinking {
+    animation: blink 1s step-start infinite;
+    color: #fff;
+    font-weight: 200;
+  }
+  
