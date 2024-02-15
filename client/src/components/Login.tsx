@@ -9,6 +9,7 @@ const Login = ({}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const {setIsGuest, setIsLoggedIn, setUserEmail} = useAuth();
+    const [errorMsg, setErrorMsg] = useState('');
     const navigate = useNavigate();
     async function handleLogin() {
         let response;
@@ -26,7 +27,9 @@ const Login = ({}) => {
             navigate('/calendar');
         }
         catch(error) {
-            if(axios.isAxiosError(error)) console.log(error.response!.data.msg);
+            if(axios.isAxiosError(error)) {
+                setErrorMsg(error.response!.data.msg);
+            }
         }
     }
 
@@ -59,6 +62,7 @@ const Login = ({}) => {
                         onChange={(e) => setPassword(e.target.value)}
                         onKeyDown={handleKeyDown}
                     ></input>
+                {errorMsg != '' && <span className="error-message-disp">{errorMsg}</span>}
                 </div>
                 <button
                     className="register-btn"

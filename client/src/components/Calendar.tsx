@@ -8,6 +8,7 @@ import { useAuth } from '../components/AuthProvider'
 import { UserTab } from './calendarComponents/UserTab'
 import leftBtn from "../assets/arrow-left.svg";
 import rightBtn from "../assets/arrow-right.svg";
+import { ErrorDisplay } from './calendarComponents/ErrorDisplay';
 import personCircle from '../assets/person-circle.svg'
 /*
 * Parent level component for application 
@@ -18,17 +19,20 @@ const Calendar: FC = ({}) => {
     const [viewDate, setViewDate] = useState(today);
     const [showLeftBar, setShowLeftBar] = useState(true);
     const [showUserTab, setShowUserTab] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
     /* State to show addEvent modal (to be passed) */
     const [showModal, setShowModal] = useState(false);
     const { isLoggedIn, isGuest, userEmail } = useAuth();
     
     useEffect(() => {
-        if( isGuest || !isLoggedIn) {
-            console.log("You are not logged in ")
-            console.log(userEmail);
-        } else {
-            console.log(" you are logged in " + localStorage.getItem('token'));
+        if(localStorage.getItem('token') === null) {
+            setErrorMsg('You are not logged in, any changes will not be saved');
         }
+        // if( isGuest || !isLoggedIn) {
+        //     setErrorMsg('You are not logged in, any changes will not be saved');
+        // } else {
+        //     console.log(" you are logged in " + localStorage.getItem('token'));
+        // }
     })
     /* nextPrevDateBtns: Renders the next date and prev date buttons */
     const nextPrevDateBtns = () => {
@@ -70,6 +74,7 @@ const Calendar: FC = ({}) => {
 
     return(
         <div className="calendar">
+            {errorMsg != '' && <ErrorDisplay msg={errorMsg} setMsg={setErrorMsg}/>}
             <div className="calendar-header">
                 <img onClick={() => setShowLeftBar(!showLeftBar)} className="sidebar-icon" src={sideBar}/>
                 <div className="logo-text-container">

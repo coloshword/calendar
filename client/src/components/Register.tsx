@@ -10,13 +10,24 @@ const Register = ({}) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const {setIsGuest, setIsLoggedIn, setUserEmail} = useAuth();
+    const [errorMsg, setErrorMsg] = useState('');
     const navigate = useNavigate();
 
     /** verifyInputs: verifies the inputs of the register form. Returns the empty string if no issue, otherwise returns the error as string */
     function verifyInputs() : string {
         const emailTest = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-        if(!emailTest.test(email)) return 'Please enter a valid email';
-        if(password != confirmPassword) return 'Passwords do not match';
+        if(!emailTest.test(email)) {
+            setErrorMsg('Please enter a valid email');
+            return 'Please enter a valid email';
+        }
+        if(password.length == 0) {
+            setErrorMsg('Password cannot be empty');
+            return 'Password cannot be empty';
+        }
+        if(password != confirmPassword ) {
+            setErrorMsg('Passwords do not match');
+            return 'Passwords do not match';
+        }
         return '';
     }
 
@@ -48,7 +59,9 @@ const Register = ({}) => {
             setUserEmail(response.data.email);
             navigate('/calendar');
         }catch(error) {
-            console.error("Failed to register user ", error);
+            if(axios.isAxiosError(error)) {
+                setErrorMsg(error.response!.data.msg);
+            }
         }
     }
     return(
@@ -63,6 +76,7 @@ const Register = ({}) => {
                     <input className="register-input" placeholder="Email" onChange={(e) => setEmail(e.target.value)}></input>
                     <input type="password" className="register-input" placeholder="Password" onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></input>
                     <input type="password" className="register-input" placeholder="Confirm" onChange={(e) => setConfirmPassword(e.target.value) } onKeyDown={handleKeyDown}></input>
+                    {errorMsg != '' && <span className="error-message-disp">{errorMsg}</span>}
                 </div>
                 <button 
                     className="register-btn"
