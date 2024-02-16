@@ -27,10 +27,12 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
     useEffect(() => {
         if (!viewDate) return; 
         console.log(notes);
-        if (viewDate.toDateString() in notes) {
-            setNote(notes[viewDate.toDateString()]);
-        } else {
-            setNote('');
+        if(notes != undefined) {
+            if (viewDate.toDateString() in notes) {
+                setNote(notes[viewDate.toDateString()]);
+            } else {
+                setNote('');
+            }
         }
     }, [notes, viewDate]);
 
