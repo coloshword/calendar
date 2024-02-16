@@ -23,7 +23,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node ./server/dist/server.js",
+    "start": "tsc && node ./server/dist/server.js",
     "build": "cd client && npm run build"
   }
 }
