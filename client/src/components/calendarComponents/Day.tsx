@@ -55,7 +55,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             setDragEvent(null);
         }
         fetchEvents()
-    }, [dayGridRef, showModal]);
+    }, [showModal]);
 
     /** fetchEvents: fetch the events for a given user from the db if the user is logged in  */
     async function fetchEvents() {
@@ -167,8 +167,8 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         const initialPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
         
         // Snap the start position to the nearest 15-minute interval
-        const [snappedHr, snappedMin] = getTimeFromPos(initialPos, domRect!);
-        const snappedInitialPos = getPosFromTime(snappedHr, snappedMin, domRect!);
+        const [snappedHr, snappedMin] = getTimeFromPos(initialPos, dayGridRef.current!.getBoundingClientRect());
+        const snappedInitialPos = getPosFromTime(snappedHr, snappedMin, dayGridRef.current!.getBoundingClientRect());
     
         // Set the drag event with the snapped position
         setDragEvent({ top: snappedInitialPos, height: 0 });
@@ -179,8 +179,8 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     function dragging(e: React.MouseEvent<HTMLDivElement>) {
         if (isDragging && dragEvent) {
             const currentPos = getDayGridPos(e.clientY, dayGridRef.current!.getBoundingClientRect(), dayGridRef.current!);
-            const [hr, minute] = getTimeFromPos(currentPos, domRect!);
-            let snappedPos = getPosFromTime(hr, minute, domRect!); 
+            const [hr, minute] = getTimeFromPos(currentPos, dayGridRef.current!.getBoundingClientRect());
+            let snappedPos = getPosFromTime(hr, minute, dayGridRef.current!.getBoundingClientRect()); 
             setDragEvent({ ...dragEvent, height: snappedPos - dragEvent.top });
         }
     }
@@ -189,8 +189,8 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
     function endDrag(e: React.MouseEvent<HTMLDivElement>) {
         // Snap start and end times to the nearest 15 minutes
         if(dragEvent) {
-            const start = getTimeFromPos(dragEvent!.top, domRect!);
-            const end = getTimeFromPos(dragEvent!.top + dragEvent!.height, domRect!);
+            const start = getTimeFromPos(dragEvent!.top, dayGridRef.current!.getBoundingClientRect());
+            const end = getTimeFromPos(dragEvent!.top + dragEvent!.height, dayGridRef.current!.getBoundingClientRect());
         
             setIsDragging(false);
             setDefaultModalStart(start);
@@ -207,7 +207,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             className="day-event dragging-day-event" 
             style={{ top: `${dragEvent.top}px`, height: `${dragEvent.height}px` , backgroundColor: `${color}`}}>
             <span className="event-title">{"Untitled"}</span>
-            <span className="event-time">{`${formatTime(getTimeFromPos(dragEvent.top, domRect!))} - ${formatTime(getTimeFromPos(dragEvent.top + dragEvent.height, domRect!))}`}</span>
+            <span className="event-time">{`${formatTime(getTimeFromPos(dragEvent.top, dayGridRef.current!.getBoundingClientRect()))} - ${formatTime(getTimeFromPos(dragEvent.top + dragEvent.height, dayGridRef.current!.getBoundingClientRect()))}`}</span>
         </div>
     );
     
@@ -216,8 +216,8 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
         // everytime rendering events we reset the color to blue
         return events.map((event, index) => {
             if(event.date.toDateString() == day.toDateString()) {
-                const top = getPosFromTime(event.start[0], event.start[1], domRect!);
-                const height = getEventHeight(event.start, event.end, domRect!);
+                const top = getPosFromTime(event.start[0], event.start[1], dayGridRef.current!.getBoundingClientRect());
+                const height = getEventHeight(event.start, event.end, dayGridRef.current!.getBoundingClientRect());
                 const handleEventClick = (e: React.MouseEvent<HTMLDivElement>) => {
                     e.stopPropagation(); 
                     setCurrentEvent(event);
