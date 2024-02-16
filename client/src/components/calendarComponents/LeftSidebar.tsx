@@ -26,8 +26,11 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
     // effect to update displayed note when `notes` or `viewDate` changes
     useEffect(() => {
         if (!viewDate) return; 
-        const currentNote = notes[viewDate.toDateString()] || '';
-        setNote(currentNote);
+        if (viewDate.toDateString() in notes) {
+            setNote(notes[viewDate.toDateString()]);
+        } else {
+            setNote('');
+        }
     }, [notes, viewDate]);
 
     /** getNotes: get the notes from the db */
