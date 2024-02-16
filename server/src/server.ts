@@ -8,7 +8,7 @@ import { Request } from 'express';
 
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
-const port = 3500;
+const port = process.env.PORT || 3500
 const saltRounds = 5;
 app.use(cors());
 app.use(express.json());
