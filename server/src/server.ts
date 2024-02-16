@@ -20,12 +20,6 @@ declare module 'express-serve-static-core' {
   }
 }
 
-/** Event query */
-type EventQuery = {
-    userId: ObjectId;
-    [key: string]: any; 
-};
-
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -41,7 +35,7 @@ async function run() {
         await client.db("admin").command({ ping: 1 });
 
         console.log("successfully connected to mongodb");
-
+        console.log(port);
         app.listen(port, () => {   
             console.log(`server listening on port ${port}`);
         })
