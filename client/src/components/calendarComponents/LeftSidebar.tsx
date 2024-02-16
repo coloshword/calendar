@@ -45,6 +45,9 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
             });
             // upon successful message, set the notes object to the response 
             setNotes(response.data.message);
+            if(response.data.message != undefined) {
+                setNotes(response.data.message);
+            }
         } catch(error) {
             console.log(error);
             setNotes({});
