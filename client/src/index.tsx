@@ -8,7 +8,7 @@ import { AuthProvider } from './components/AuthProvider'
 
 // const rootElement = document.getElementById("root") as HTMLElement;
 // const root = createRoot(rootElement)
-
+// gerqw
 ReactDOM.render(
     <React.StrictMode>
       <AuthProvider>
