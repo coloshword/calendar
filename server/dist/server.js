@@ -20,7 +20,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const auth_1 = require("./auth");
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = (0, express_1.default)();
-const port = 3500;
+const port = process.env.PORT || 3500;
 const saltRounds = 5;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
@@ -38,6 +38,7 @@ function run() {
             yield client.connect();
             yield client.db("admin").command({ ping: 1 });
             console.log("successfully connected to mongodb");
+            console.log(port);
             app.listen(port, () => {
                 console.log(`server listening on port ${port}`);
             });
