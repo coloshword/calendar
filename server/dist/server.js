@@ -18,6 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const auth_1 = require("./auth");
+const path_1 = __importDefault(require("path"));
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3500;
@@ -48,6 +49,11 @@ function run() {
         }
     });
 }
+// serve
+app.use(express_1.default.static(path_1.default.join(__dirname, '../../client/build')));
+app.get('*', (req, res) => {
+    res.sendFile(path_1.default.resolve(__dirname, '../../client', 'build', 'index.html'));
+});
 // auth endpoint protection 
 app.get("/auth-endpoint", auth_1.authMiddleware, (request, response) => {
     response.json({ msg: "authorized users only" });
