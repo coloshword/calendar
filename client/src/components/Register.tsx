@@ -46,7 +46,7 @@ const Register = ({}) => {
         }
         try {
             // verify inputs
-            let response = await axios.post('http://localhost:3500/register', {
+            let response = await axios.post('/register', {
                 email: email,
                 password: password
             });
@@ -82,7 +82,7 @@ const Register = ({}) => {
                     className="register-btn"
                     onClick={() => submitRegister()}
                     >Register</button>
-                <a href="http://localhost:3000/login"> Sign in</a>
+                <a href="/login"> Sign in</a>
                 <div className="register-footer"></div>
             </div>
         </div>

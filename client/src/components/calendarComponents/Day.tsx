@@ -63,7 +63,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
             const token = localStorage.getItem('token'); // Retrieve the token from local storage
             if (!token) return; // Ensure there's a token present
 
-            const response = await axios.get('http://localhost:3500/get-events', {
+            const response = await axios.get('/get-events', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

@@ -33,7 +33,7 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
     async function getNotes() {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:3500/get-note', {
+            const response = await axios.get('/get-note', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -53,7 +53,7 @@ const LeftSidebar: FC<LeftSidebarProps> = ({showModal, setShowModal, viewDate, s
     async function updateDateNote(note: Object) {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:3500/update-note', note, {
+            const response = await axios.post('/update-note', note, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

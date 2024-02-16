@@ -15,7 +15,7 @@ const Login = ({}) => {
         let response;
         try {
             console.log("post request");
-            response = await axios.post('http://localhost:3500/login', {
+            response = await axios.post('/login', {
                 email: email,
                 password: password
             });
@@ -68,7 +68,7 @@ const Login = ({}) => {
                     className="register-btn"
                     onClick={() => handleLogin()}
                     >Login</button>
-                <a href="http://localhost:3000/register" className="link">Don't have an account? Register</a>
+                <a href="/register" className="link">Don't have an account? Register</a>
                 <div className="register-footer"></div>
             </div>
         </div>
