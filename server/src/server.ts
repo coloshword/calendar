@@ -4,7 +4,8 @@ import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {authMiddleware} from './auth'
-import { Request } from 'express';
+import path from 'path';
+
 
 const uri = "mongodb+srv://Cluster92290:dawg123123123@cluster92290.vr1l9yv.mongodb.net/?retryWrites=true&w=majority";
 const app = express();
@@ -44,6 +45,12 @@ async function run() {
         await client.close();
     }
 }
+// serve
+app.use(express.static(path.join(__dirname, '../../client/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../client', 'build', 'index.html'));
+});
 
 // auth endpoint protection 
 app.get("/auth-endpoint", authMiddleware, (request, response) => {
