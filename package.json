@@ -24,7 +24,7 @@
   },
   "scripts": {
     "start": "node ./server/dist/server.js",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm run build && cd server && tsc",
     "postinstall": "npm run build"
 }
 }
