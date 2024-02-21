@@ -28,7 +28,7 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     }
 });
-
+/** run the server */
 async function run() {
     console.log("Attempting to connect to MongoDB...");
     try {
