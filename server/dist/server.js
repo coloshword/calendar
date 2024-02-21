@@ -32,6 +32,7 @@ const client = new mongodb_1.MongoClient(uri, {
         deprecationErrors: true,
     }
 });
+/** run the server */
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Attempting to connect to MongoDB...");
@@ -49,12 +50,15 @@ function run() {
         }
     });
 }
-// serve
-app.use(express_1.default.static(path_1.default.join(__dirname, '../../client/build')));
-app.get('*', (req, res) => {
-    res.sendFile(path_1.default.resolve(__dirname, '../../client', 'build', 'index.html'));
+run().catch(error => {
+    console.error("Error starting the server:", error);
+    process.exit(1);
 });
-// auth endpoint protection 
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.path}`);
+    next();
+});
+// serve
 app.get("/auth-endpoint", auth_1.authMiddleware, (request, response) => {
     response.json({ msg: "authorized users only" });
 });
@@ -122,6 +126,7 @@ app.post('/add-event', auth_1.authMiddleware, (req, res) => __awaiter(void 0, vo
     const userId = req.user.userId;
     try {
         const eventCollection = client.db('lightCalendar').collection('Events');
+        console.log("these lights will inspire you!");
         const { insertedId: eventId } = yield eventCollection.insertOne({
             userId,
             title,
@@ -151,6 +156,7 @@ app.get('/get-events', auth_1.authMiddleware, (req, res) => __awaiter(void 0, vo
         const user = yield usersCollection.findOne({ _id: new mongodb_1.ObjectId(userId) });
         if (user) {
             const eventsCollection = db.collection("Events");
+            console.log("Get events accessed  " + user);
             const events = yield eventsCollection.find({
                 _id: { $in: user.events.map((eventId) => new mongodb_1.ObjectId(eventId)) }
             }).toArray();
@@ -206,7 +212,7 @@ app.get('/get-note', auth_1.authMiddleware, (req, res) => __awaiter(void 0, void
         res.status(500).json({ message: error });
     }
 }));
-run().catch(error => {
-    console.error("Error starting the server:", error);
-    process.exit(1);
+app.use(express_1.default.static(path_1.default.join(__dirname, '../../client/build')));
+app.get('*', (req, res) => {
+    res.sendFile(path_1.default.resolve(__dirname, '../../client', 'build', 'index.html'));
 });
