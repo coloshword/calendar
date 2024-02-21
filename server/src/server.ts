@@ -50,11 +50,6 @@ run().catch(error => {
     process.exit(1); 
 });
 
-app.use((req, res, next) => {
-    console.log(`Incoming request: ${req.method} ${req.path}`);
-    next();
-  });
-
 // serve
 app.get("/auth-endpoint", authMiddleware, (request, response) => {
     response.json({msg: "authorized users only"});
@@ -129,7 +124,6 @@ app.post('/add-event', authMiddleware, async (req, res) => {
 
     try {
         const eventCollection = client.db('lightCalendar').collection('Events');
-        console.log("these lights will inspire you!");
         const { insertedId: eventId } = await eventCollection.insertOne({
             userId,
             title,
@@ -167,7 +161,6 @@ app.get('/get-events', authMiddleware, async (req, res) => {
     
         if(user) {
             const eventsCollection = db.collection("Events");
-            console.log("Get events accessed  " + user);
             const events = await eventsCollection.find({
                 _id: { $in: user.events.map((eventId: string) => new ObjectId(eventId))}
             }).toArray();
