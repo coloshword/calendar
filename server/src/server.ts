@@ -129,6 +129,7 @@ app.post('/add-event', authMiddleware, async (req, res) => {
 
     try {
         const eventCollection = client.db('lightCalendar').collection('Events');
+        console.log("these lights will inspire you!");
         const { insertedId: eventId } = await eventCollection.insertOne({
             userId,
             title,
