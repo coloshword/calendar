@@ -160,9 +160,10 @@ app.get('/get-events', authMiddleware, async (req, res) => {
         const db = client.db("lightCalendar");
         const usersCollection = db.collection("Users");
         const user = await usersCollection.findOne({_id: new ObjectId(userId)});
-        
+    
         if(user) {
             const eventsCollection = db.collection("Events");
+            console.log("Get events accessed  " + user);
             const events = await eventsCollection.find({
                 _id: { $in: user.events.map((eventId: string) => new ObjectId(eventId))}
             }).toArray();
