@@ -46,16 +46,10 @@ async function run() {
     }
 }
 // serve
-app.use(express.static(path.join(__dirname, '../../client/build')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../client', 'build', 'index.html'));
-});
-
-// auth endpoint protection 
 app.get("/auth-endpoint", authMiddleware, (request, response) => {
     response.json({msg: "authorized users only"});
 });
+
 
 //post: register
 app.post('/register', async (req, res) => {
@@ -220,6 +214,14 @@ app.get('/get-note', authMiddleware, async(req, res) => {
     catch(error) {
         res.status(500).json({message : error});
     }
+});
+
+
+app.use(express.static(path.join(__dirname, '../../client/build')));
+
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../client', 'build', 'index.html'));
 });
 
 run().catch(error => {
