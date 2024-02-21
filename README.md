@@ -1,5 +1,5 @@
 # lightcalendar
-A Google calendar inspired full-stack web calendar built with React & TypeScript. MongoDB, axios and Express.js with TypeScript for the backend.
+A Google calendar inspired full-stack web calendar built with React & TypeScript for the frontend, and Express.js, TypeScript and MongoDB for the backend.
 Available [here](https://lightcalendar-a488f2164abc.herokuapp.com/)
 
 ![Landing Page](/images/landingpage.png)
