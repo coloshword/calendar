@@ -65,14 +65,12 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log("Event added successfully:", response.data);
         } catch (error) {
             console.error("Failed to add event", error);
         }
     }    
     
     function convertToMilitaryTime(timeStr: string): [number, number] {
-        console.log(timeStr);
         const regex = /(\d{1,2}):(\d{2})\s*(am|pm)/i;
         const match = timeStr.match(regex);
     
@@ -89,7 +87,6 @@ const AddEvent: FC<AddEventProps> = ({setShowModal, events, setEvents, defaultMo
     
             return [hours, minutes];
         } else {
-            console.log('MATCH ERROR');
             throw new Error('Invalid time format');
         }
     }

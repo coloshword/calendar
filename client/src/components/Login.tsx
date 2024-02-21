@@ -14,7 +14,6 @@ const Login = ({}) => {
     async function handleLogin() {
         let response;
         try {
-            console.log("post request");
             response = await axios.post('/login', {
                 email: email,
                 password: password

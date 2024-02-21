@@ -41,7 +41,6 @@ const Register = ({}) => {
     async function submitRegister() {
         let isValid:string = verifyInputs(); 
         if(isValid != '') {
-            console.log(isValid);
             return; 
         }
         try {
@@ -50,7 +49,6 @@ const Register = ({}) => {
                 email: email,
                 password: password
             });
-            console.log(response.data.token);
             //save token and redirect just as if logged in
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('email', response.data.email);

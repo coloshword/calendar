@@ -1,6 +1,6 @@
 {
-  "name": "calendar",
-  "version": "0.1.0",
+  "name": "lightcalendar",
+  "version": "1.0.0",
   "engines": {
     "node": "21.x"
   },

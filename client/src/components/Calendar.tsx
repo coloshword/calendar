@@ -28,11 +28,6 @@ const Calendar: FC = ({}) => {
         if(localStorage.getItem('token') === null) {
             setErrorMsg('You are not logged in, any changes will not be saved');
         }
-        // if( isGuest || !isLoggedIn) {
-        //     setErrorMsg('You are not logged in, any changes will not be saved');
-        // } else {
-        //     console.log(" you are logged in " + localStorage.getItem('token'));
-        // }
     })
     /* nextPrevDateBtns: Renders the next date and prev date buttons */
     const nextPrevDateBtns = () => {

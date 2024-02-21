@@ -67,8 +67,7 @@ const Day: FC<DayProps> = ({ day, today, showModal, setShowModal}) => {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            });
-            console.log(response);           
+            });         
             let jsonEvents = response.data.events || [];
             const events = jsonEvents.map((item: Event)  => {
                 return {
