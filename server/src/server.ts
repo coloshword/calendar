@@ -14,7 +14,6 @@ const saltRounds = 5;
 app.use(cors());
 app.use(express.json());
 
-/**fdas */
 /** auth middleware support */
 declare module 'express-serve-static-core' {
   interface Request {
@@ -30,17 +29,36 @@ const client = new MongoClient(uri, {
     }
 });
 
+async function run() {
+    console.log("Attempting to connect to MongoDB...");
+    try {
+        await client.connect();
+        await client.db("admin").command({ ping: 1 });
+
+        console.log("successfully connected to mongodb");
+        console.log(port);
+        app.listen(port, () => {   
+            console.log(`server listening on port ${port}`);
+        })
+    } catch {
+        await client.close();
+    }
+}
+
+run().catch(error => {
+    console.error("Error starting the server:", error);
+    process.exit(1); 
+});
+
 app.use((req, res, next) => {
     console.log(`Incoming request: ${req.method} ${req.path}`);
     next();
   });
 
-  
 // serve
 app.get("/auth-endpoint", authMiddleware, (request, response) => {
     response.json({msg: "authorized users only"});
 });
-
 
 //post: register
 app.post('/register', async (req, res) => {
@@ -207,32 +225,9 @@ app.get('/get-note', authMiddleware, async(req, res) => {
     }
 });
 
-
 app.use(express.static(path.join(__dirname, '../../client/build')));
 
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../client', 'build', 'index.html'));
-});
-
-
-async function run() {
-    console.log("Attempting to connect to MongoDB...");
-    try {
-        await client.connect();
-        await client.db("admin").command({ ping: 1 });
-
-        console.log("successfully connected to mongodb");
-        console.log(port);
-        app.listen(port, () => {   
-            console.log(`server listening on port ${port}`);
-        })
-    } catch {
-        await client.close();
-    }
-}
-
-run().catch(error => {
-    console.error("Error starting the server:", error);
-    process.exit(1); 
 });
